@@ -1,0 +1,151 @@
+<br />
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h1>Student Family Details</h1>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <ng-container matColumnDef="FullName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
+      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.studentFamilyId)"> {{element.fullName}} </a></td>
+    </ng-container>
+    <ng-container matColumnDef="Relation">
+      <th mat-header-cell *matHeaderCellDef>Relation</th>
+      <td mat-cell *matCellDef="let element"> {{ element.relation }} </td>
+    </ng-container>
+    <ng-container matColumnDef="Qualification">
+      <th mat-header-cell *matHeaderCellDef>Qualification</th>
+      <td mat-cell *matCellDef="let element">{{ element.qualification }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Occupation">
+      <th mat-header-cell *matHeaderCellDef>Occupation</th>
+      <td mat-cell *matCellDef="let element">{{ element.occupation }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Designation">
+      <th mat-header-cell *matHeaderCellDef>Designation</th>
+      <td mat-cell *matCellDef="let element">{{ element.designation }}</td>
+    </ng-container>
+    <ng-container matColumnDef="MobileNo">
+      <th mat-header-cell *matHeaderCellDef>Mobile No</th>
+      <td mat-cell *matCellDef="let element">{{ element.mobileNo }}</td>
+    </ng-container>
+    <ng-container matColumnDef="EmailAddress">
+      <th mat-header-cell *matHeaderCellDef>Email Address</th>
+      <td mat-cell *matCellDef="let element">{{ element.emailAddress }}</td>
+    </ng-container>
+    <ng-container matColumnDef="MonthlyIncome">
+      <th mat-header-cell *matHeaderCellDef>Monthly Income</th>
+      <td mat-cell *matCellDef="let element">{{ element.monthlyIncome }}</td>
+    </ng-container>
+    <ng-container matColumnDef="OfficeAddress">
+      <th mat-header-cell *matHeaderCellDef>OfficeAddress</th>
+      <td mat-cell *matCellDef="let element">{{ element.officeAddress }}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="cols"></tr>
+    <tr mat-row *matRowDef="let row; columns: cols"></tr>
+  </table>
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons ></mat-paginator>
+  </mat-expansion-panel>
+</mat-accordion>
+<br />
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h1>Student Family Information</h1>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div>
+      <form #myform="ngForm" (ngSubmit)="myform.valid && register(myform)" novalidate>
+        <div class="row">
+          <div class="col-lg-4">
+            <div>
+              <mat-form-field>
+                <input matInput placeholder="Full Name" name="fullName" required [(ngModel)]="request.fullName" />
+                <mat-error>Please enter Full Name</mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Relation</mat-label>
+                <mat-select name="relation" required [(ngModel)]="request.relation">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option value="Father">Father</mat-option>
+                  <mat-option value="Mother">Mother</mat-option>
+                  <mat-option value="Guardian">Guardian</mat-option>
+                </mat-select>
+                <mat-error>Please select Relation</mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Occupation</mat-label>
+                <mat-select name="occupation" required [(ngModel)]="request.occupation">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option value="Business">Business</mat-option>
+                  <mat-option value="Professional">Professional</mat-option>
+                  <mat-option value="Homemaker">Homemaker</mat-option>
+                </mat-select>
+                <mat-error>Please select Occupation</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div>
+              <mat-form-field>
+                <mat-label>Qualification</mat-label>
+                <mat-select name="qualification" required [(ngModel)]="request.qualification">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option value="Post Graduate">Post Graduate</mat-option>
+                  <mat-option value="Graduate">Graduate</mat-option>
+                  <mat-option value="Diploma">Diploma</mat-option>
+                  <mat-option value="HSC">HSC</mat-option>
+                  <mat-option value="SSC">SSC</mat-option>
+                </mat-select>
+                <mat-error>Please select Qualification</mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <input matInput placeholder="Designation" name="designation" required [(ngModel)]="request.designation"/>
+                <mat-error>Please enter Designation</mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <input matInput placeholder="Mobile No" name="mobileNo" required [(ngModel)]="request.mobileNo"/>
+                <mat-error>Please enter Mobile No</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div>
+              <mat-form-field>
+                <input matInput placeholder="Email Address" name="emailAddress" required [(ngModel)]="request.emailAddress"/>
+                <mat-error>Please enter Email Address</mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <input type="number" matInput placeholder="Monthly Income" name="monthlyIncome" required [(ngModel)]="request.monthlyIncome"/>
+                <mat-error>Please enter Monthly Income</mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <input matInput placeholder="Office Address" name="officeAddress" required [(ngModel)]="request.officeAddress"/>
+                <mat-error>Please enter Office Address</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-12 text-center">
+            <button mat-raised-button style="margin-right: 16px" color="primary" [disabled]="myform.invalid && myform.submitted" > Save </button>
+            <button mat-raised-button style="margin-right: 16px" type="reset" color="warn"> Reset </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

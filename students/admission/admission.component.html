@@ -1,0 +1,109 @@
+<br />
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h1>Admission Details</h1>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <ng-container matColumnDef="AdmissionNo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Admission No</th>
+        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.admissionId)"> {{element.admissionNo}} </a></td>
+      </ng-container>
+      <ng-container matColumnDef="AdmissionDate">
+          <th mat-header-cell *matHeaderCellDef>Admission Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.admissionDate | date:'dd-MMM-yyyy' }}</td>
+        </ng-container>
+      <ng-container matColumnDef="GRNo">
+        <th mat-header-cell *matHeaderCellDef>GR No</th>
+        <td mat-cell *matCellDef="let element"> {{ element.grNo }} </td>
+      </ng-container>
+      <ng-container matColumnDef="FormNo">
+        <th mat-header-cell *matHeaderCellDef>Form No</th>
+        <td mat-cell *matCellDef="let element">{{ element.formNo }}</td>
+      </ng-container>
+      <ng-container matColumnDef="AcademicYear">
+        <th mat-header-cell *matHeaderCellDef>Academic Year</th>
+        <td mat-cell *matCellDef="let element"> {{element.academicYear}} </td>
+      </ng-container>
+      <ng-container matColumnDef="GradeDescription">
+        <th mat-header-cell *matHeaderCellDef>Grade Description</th>
+        <td mat-cell *matCellDef="let element"> {{ element.gradeDescription }} </td>
+      </ng-container>
+      <ng-container matColumnDef="Comments">
+        <th mat-header-cell *matHeaderCellDef>Comments</th>
+        <td mat-cell *matCellDef="let element">{{ element.comments }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="cols"></tr>
+      <tr mat-row *matRowDef="let row; columns: cols"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons ></mat-paginator>
+  </mat-expansion-panel>
+</mat-accordion>
+<br />
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h1>Admission Information</h1>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div>
+      <form #myform="ngForm" (ngSubmit)="myform.valid && register(myform)" novalidate>
+        <div class="row">
+          <div class="col-lg-4">
+            <div>
+              <mat-form-field>
+                  <mat-label>Academic Year</mat-label>
+                  <mat-select name="academicYear" required [(ngModel)]="request.academicYear">
+                    <mat-option>--Select--</mat-option>
+                    <mat-option value="2022 - 2023">2022 - 2023</mat-option>
+                  </mat-select>
+                  <mat-error>Please select Academic Year</mat-error>
+                </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+                <mat-label>Grade Description</mat-label>
+                <mat-select name="gradeDescription" required [(ngModel)]="request.gradeDescription">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option value="Nursery">Nursery</mat-option>
+                  <mat-option value="Jr. KG">Jr. KG</mat-option>
+                  <mat-option value="Sr. KG">Sr. KG</mat-option>
+                  <mat-option value="Std I">Std I</mat-option>
+                  <mat-option value="Std II">Std II</mat-option>
+                  <mat-option value="Std III">Std III</mat-option>
+                </mat-select>
+                <mat-error>Please select Grade Description</mat-error>
+              </mat-form-field>
+        </div>
+          </div>
+          <div class="col-lg-4">
+            <div>
+                <mat-form-field>
+                    <mat-label>Admission Date</mat-label>
+                    <input matInput required [matDatepicker]="admissionDate" name="admissionDate" [(ngModel)]="request.admissionDate">
+                    <mat-datepicker-toggle matSuffix [for]="admissionDate"></mat-datepicker-toggle>
+                    <mat-datepicker #admissionDate></mat-datepicker>
+                    <mat-error>Please enter Admission Date</mat-error>
+                </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div>
+              <mat-form-field>
+                <input matInput placeholder="Comments" name="comments" required [(ngModel)]="request.comments"/>
+                <mat-error>Please enter Comments</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-12 text-center">
+            <button mat-raised-button style="margin-right: 16px" color="primary" [disabled]="myform.invalid && myform.submitted" > Save </button>
+            <button mat-raised-button style="margin-right: 16px" type="reset" color="warn"> Reset </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

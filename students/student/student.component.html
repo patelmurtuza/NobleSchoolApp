@@ -1,0 +1,211 @@
+<br />
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h1>Student Details</h1>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-form-field>
+        <input matInput placeholder="Search here" (keyup)="applyFilter($event)">
+      </mat-form-field>
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <ng-container matColumnDef="FirstName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+    <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.studentId)"> {{element.firstName}} </a></td>
+  </ng-container>
+  <ng-container matColumnDef="MiddleName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Middle Name</th>
+    <td mat-cell *matCellDef="let element"> {{element.middleName}} </td>
+  </ng-container>
+  <ng-container matColumnDef="LastName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+    <td mat-cell *matCellDef="let element"> {{element.lastName}}</td>
+  </ng-container>
+  <ng-container matColumnDef="DOB">
+    <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+    <td mat-cell *matCellDef="let element"> {{element.dob | date:'dd-MMM-yyyy' }} </td>
+  </ng-container>
+  <ng-container matColumnDef="Gender">
+    <th mat-header-cell *matHeaderCellDef>Gender</th>
+    <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+  </ng-container>
+  <ng-container matColumnDef="BirthPlace">
+    <th mat-header-cell *matHeaderCellDef>Birth Place</th>
+    <td mat-cell *matCellDef="let element"> {{element.birthPlace}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Religion">
+    <th mat-header-cell *matHeaderCellDef>Religion</th>
+    <td mat-cell *matCellDef="let element"> {{element.religion}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Caste">
+    <th mat-header-cell *matHeaderCellDef>Caste</th>
+    <td mat-cell *matCellDef="let element"> {{element.caste}} </td>
+  </ng-container>
+  <ng-container matColumnDef="MotherTongue">
+    <th mat-header-cell *matHeaderCellDef>Mother Tongue</th>
+    <td mat-cell *matCellDef="let element"> {{element.motherTongue}} </td>
+  </ng-container>
+  <ng-container matColumnDef="NativePlace">
+    <th mat-header-cell *matHeaderCellDef>Native Place</th>
+    <td mat-cell *matCellDef="let element"> {{element.nativePlace}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Nationality">
+    <th mat-header-cell *matHeaderCellDef>Nationality</th>
+    <td mat-cell *matCellDef="let element"> {{element.nationality}} </td>
+  </ng-container>
+  <ng-container matColumnDef="MobileNo">
+    <th mat-header-cell *matHeaderCellDef>Mobile No</th>
+    <td mat-cell *matCellDef="let element"> {{element.mobileNo}} </td>
+  </ng-container>
+  <ng-container matColumnDef="EmailAddress">
+    <th mat-header-cell *matHeaderCellDef>Email Address</th>
+    <td mat-cell *matCellDef="let element"> {{element.emailAddress}} </td>
+  </ng-container>
+  <ng-container matColumnDef="ProfilePhotoPath">
+    <th mat-header-cell *matHeaderCellDef>Profile Photo</th>
+    <td mat-cell *matCellDef="let element"> <a [href]="element.profilePhotoPath" target="_blank">{{getFileName(element.profilePhotoPath)}}</a> </td>
+  </ng-container>
+  <ng-container matColumnDef="Info">
+    <th mat-header-cell *matHeaderCellDef>View Info</th>
+    <td mat-cell *matCellDef="let element"> <a [routerLink]="['/student-info', element.studentId]">More Info</a> </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="cols"></tr>
+  <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+</table>
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons>
+</mat-paginator>
+    </mat-expansion-panel>
+  </mat-accordion>
+<br />
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h1>Student Information</h1>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div>
+      <form #myform="ngForm" (ngSubmit)="myform.valid && register(myform)" novalidate>
+        <div class="row">
+            <div class="col-lg-4">
+                <div>
+                    <mat-form-field>
+                        <input matInput placeholder="First Name" name="firstName" required [(ngModel)]="request.firstName">
+                        <mat-error>Please enter First Name</mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <input matInput placeholder="Place of Birth" name="birthPlace" required [(ngModel)]="request.birthPlace">
+                        <mat-error>Please enter Place of Birth</mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                      <mat-label>Religion</mat-label>
+                      <mat-select name="religion" required [(ngModel)]="request.religion">
+                        <mat-option>--Select--</mat-option>
+                        <mat-option value="Muslim">Muslim</mat-option>
+                        <mat-option value="Hindu">Hindu</mat-option>
+                        <mat-option value="Christian">Christian</mat-option>
+                      </mat-select>
+                      <mat-error>Please select Religion</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field>
+                        <input matInput placeholder="Native Place" name="nativePlace" required [(ngModel)]="request.nativePlace">
+                        <mat-error>Please enter Native Place</mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <input matInput placeholder="Email Address" name="emailAddress" required [(ngModel)]="request.emailAddress">
+                        <mat-error>Please enter Email Address</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div>
+                    <mat-form-field>
+                        <input matInput placeholder="Middle Name" name="middleName" required [(ngModel)]="request.middleName">
+                        <mat-error>Please enter Middle Name</mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Date of Birth</mat-label>
+                        <input matInput required [matDatepicker]="dob" name="dob" [(ngModel)]="request.dob">
+                        <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                        <mat-datepicker #dob></mat-datepicker>
+                        <mat-error>Please enter Date of Birth</mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                      <mat-label>Caste</mat-label>
+                      <mat-select name="caste" required [(ngModel)]="request.caste">
+                        <mat-option>--Select--</mat-option>
+                        <mat-option value="General">General</mat-option>
+                      </mat-select>
+                      <mat-error>Please select Caste</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field>
+                      <mat-label>Nationality</mat-label>
+                      <mat-select name="nationality" required [(ngModel)]="request.nationality">
+                        <mat-option>--Select--</mat-option>
+                        <mat-option value="Indian">Indian</mat-option>
+                      </mat-select>
+                      <mat-error>Please select Nationality</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div>
+                      <button mat-stroked-button color="accent" (click)="fileInput.click()" type="button">Upload Profile Photo</button>
+                      <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" accept=".png,.jpeg">
+                      <span>{{fileName}}</span>
+                  </div>
+            </div>
+            <div class="col-lg-4">
+                <div>
+                    <mat-form-field>
+                        <input matInput placeholder="Last Name" name="lastName" required [(ngModel)]="request.lastName">
+                        <mat-error>Please enter Last Name</mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                      <mat-label>Gender</mat-label>
+                      <mat-select name="gender" required [(ngModel)]="request.gender">
+                        <mat-option>--Select--</mat-option>
+                        <mat-option value="Male">Male</mat-option>
+                        <mat-option value="Female">Female</mat-option>
+                        <mat-option value="Transgender">Transgender</mat-option>
+                      </mat-select>
+                      <mat-error>Please select Gender</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field>
+                        <input matInput placeholder="Mother Tongue" name="motherTongue" required [(ngModel)]="request.motherTongue">
+                        <mat-error>Please enter Mother Tongue</mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <input matInput placeholder="Mobile No" name="mobileNo" required [(ngModel)]="request.mobileNo">
+                        <mat-error>Please enter Mobile No</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+              <button mat-raised-button style="margin-right: 16px" color="primary" [disabled]="myform.invalid && myform.submitted">Save</button>
+              <button mat-raised-button style="margin-right: 16px" type="reset" color="warn">Reset</button>
+            </div>
+        </div>
+    </form>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
