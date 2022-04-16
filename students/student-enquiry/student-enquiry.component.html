@@ -1,0 +1,20 @@
+<mat-tab-group (selectedTabChange)="tabClick($event)">
+    <mat-tab label="Student">
+        <app-student *ngIf="tabIndex == 0"></app-student>
+    </mat-tab>
+    <mat-tab label="Student Family">
+        <app-student-family *ngIf="tabIndex == 1"></app-student-family>
+    </mat-tab>
+    <mat-tab label="Previous Enrollment">
+        <app-previous-enrollment *ngIf="tabIndex == 2"></app-previous-enrollment>
+    </mat-tab>
+    <mat-tab label="Admission">
+        <app-admission *ngIf="tabIndex == 3"></app-admission>
+    </mat-tab>
+    <mat-tab label="Document">
+        <app-document *ngIf="tabIndex == 4"></app-document>
+    </mat-tab>
+    <mat-tab label="Address">
+        <app-address *ngIf="tabIndex == 5"></app-address>
+    </mat-tab>
+</mat-tab-group>

@@ -9,7 +9,7 @@
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="DocumentType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Type</th>
-        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.documentId)"> {{element.documentType}} </a></td>
+        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.studentDocumentId)"> {{element.documentType}} </a></td>
       </ng-container>
       <ng-container matColumnDef="DocumentPath">
           <th mat-header-cell *matHeaderCellDef>Document Name</th>
@@ -57,8 +57,7 @@
           <div class="col-lg-4">
             <div>
               <mat-form-field>
-                <input matInput placeholder="Comments" name="comments" required [(ngModel)]="request.comments"/>
-                <mat-error>Please enter Comments</mat-error>
+                <input matInput placeholder="Comments" name="comments" [(ngModel)]="request.comments"/>
               </mat-form-field>
             </div>
           </div>
@@ -70,7 +69,7 @@
             </div>
           </div>
           <div class="col-md-12 text-center">
-            <button mat-raised-button style="margin-right: 16px" color="primary" [disabled]="myform.invalid && myform.submitted" > Save </button>
+            <button mat-raised-button style="margin-right: 16px" color="primary" [disabled]="myform.invalid && myform.submitted || request.studentId == undefined" > Save </button>
             <button mat-raised-button style="margin-right: 16px" type="reset" color="warn"> Reset </button>
           </div>
         </div>

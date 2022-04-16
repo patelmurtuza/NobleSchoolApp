@@ -1,20 +1,85 @@
-<mat-grid-list cols="3" rowHeight="102px">
-    <mat-grid-tile *ngFor="let info of response" [colspan]="1" [rowspan]="3">
-        <table class="table table--responsive" width="100%">
-            <tr>
-                <th>Description</th>
-                <th>Amount</th>
-            </tr>
-            <tr *ngFor="let val of info.feeObj">
-                <td>{{val.feeTypeDescription}}</td>
-                <td>{{val.amount}}</td>
-            </tr>
-        </table>
-    <mat-grid-tile-header>
-        <h3><b>{{info.termPeriod}}: {{info.termPeriodDescription}}</b></h3>
-    </mat-grid-tile-header>
-    <mat-grid-tile-footer>
-        <h3><b>Total Amount: {{info.amount}}</b></h3>
-    </mat-grid-tile-footer>
-    </mat-grid-tile>
-</mat-grid-list>
+<br />
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h1>Fee Information</h1>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+      <div class="row">
+          <div class="col-lg-4">
+          </div>
+          <div class="col-lg-4">
+            <div>
+              <mat-radio-group name="term" [(ngModel)]="term">
+                <mat-radio-button [value]="1" [disabled]="response[0].isPaid" (change)="termChange($event)">Term 1</mat-radio-button>
+                <mat-radio-button [value]="2" (change)="termChange($event)">Term 2</mat-radio-button>
+                <mat-radio-button [value]="3" (change)="termChange($event)">Term 3</mat-radio-button>
+              </mat-radio-group>
+              <button mat-raised-button style="margin-left: 16px" (click)="feePayment()" [disabled]="pending == 0" color="primary"> Payment </button>
+            </div>
+            <div>
+              Total Amount: {{pending}}
+            </div>
+          </div>
+          <div class="col-lg-4">
+          </div>
+        </div>
+        <hr />
+    <mat-grid-list cols="3" rowHeight="102px">
+        <mat-grid-tile *ngFor="let info of response" [colspan]="1" [rowspan]="3">
+            <table [ngClass]="info.isPaid ? 'table table-success' : 'table table-active'" width="100%">
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                </tr>
+                <tr *ngFor="let val of info.feeObj">
+                    <td>{{val.feeTypeDescription}}</td>
+                    <td>{{val.amount}}</td>
+                </tr>
+            </table>
+        <mat-grid-tile-header>
+            <h3><b>{{info.termPeriod}}: {{info.termPeriodDescription}}</b></h3>
+        </mat-grid-tile-header>
+        <mat-grid-tile-footer>
+            <h3><b>Total Amount: {{info.amount}}</b></h3>
+        </mat-grid-tile-footer>
+        </mat-grid-tile>
+    </mat-grid-list>
+  </mat-expansion-panel>
+</mat-accordion>
+<br />
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h1>Fee Details</h1>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+        <ng-container matColumnDef="AcademicYear">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Academic Year</th>
+            <td mat-cell *matCellDef="let element">{{ element.academicYear }}</td>
+          </ng-container>
+      <ng-container matColumnDef="GradeDescription">
+          <th mat-header-cell *matHeaderCellDef>Grade Description</th>
+          <td mat-cell *matCellDef="let element">{{ element.gradeDescription }}</td>
+        </ng-container>
+        <ng-container matColumnDef="PaymentType">
+            <th mat-header-cell *matHeaderCellDef>Payment Type</th>
+            <td mat-cell *matCellDef="let element">{{ element.paymentType }}</td>
+          </ng-container>
+          <ng-container matColumnDef="RecieptAmt">
+            <th mat-header-cell *matHeaderCellDef>Reciept Amount</th>
+            <td mat-cell *matCellDef="let element">{{ element.recieptAmt }}</td>
+          </ng-container>
+          <ng-container matColumnDef="PaymentDate">
+            <th mat-header-cell *matHeaderCellDef>Payment Date</th>
+            <td mat-cell *matCellDef="let element">{{ element.paymentDate | date:'dd-MMM-yyyy' }}</td>
+          </ng-container>
+      <tr mat-header-row *matHeaderRowDef="cols"></tr>
+      <tr mat-row *matRowDef="let row; columns: cols"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons ></mat-paginator>
+  </mat-expansion-panel>
+</mat-accordion>

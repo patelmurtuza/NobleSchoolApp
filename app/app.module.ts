@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from '../login/login.component';
 import { StudentComponent } from '../students/student/student.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StudentFamilyComponent } from '../students/student-family/student-family.component';
 import { PreviousEnrollmentComponent } from '../students/previous-enrollment/previous-enrollment.component';
 import { AdmissionComponent } from '../students/admission/admission.component';
@@ -23,6 +23,11 @@ import { GlobalErrorHandler } from '../utilities/global-error-handler';
 import { StudentGradeComponent } from '../students/student-grade/student-grade.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { FeeComponent } from '../fees/fee/fee.component';
+import { FeeInfoComponent } from '../fees/fee-info/fee-info.component';
+import { StudentEnquiryComponent } from '../students/student-enquiry/student-enquiry.component';
+import { LoaderService } from '../services/loader.service';
+import { LoaderInterceptorService } from '../services/loader-interceptor.service';
+import { LoaderComponent } from '../loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +46,10 @@ import { FeeComponent } from '../fees/fee/fee.component';
     ErrorComponent,
     StudentGradeComponent,
     NotFoundComponent,
-    FeeComponent
+    FeeComponent,
+    FeeInfoComponent,
+    StudentEnquiryComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +59,10 @@ import { FeeComponent } from '../fees/fee/fee.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [ {provide: ErrorHandler, useClass: GlobalErrorHandler} ],
+  providers: [ 
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    LoaderService, { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptorService, multi: true }
+   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

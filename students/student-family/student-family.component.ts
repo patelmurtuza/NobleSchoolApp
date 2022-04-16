@@ -27,13 +27,18 @@ export class StudentFamilyComponent implements OnInit {
   ngOnInit(): void {
     this.activatedroute.paramMap.subscribe(params => { 
        this.request.studentId = params.get('id');
+       if(this.request.studentId > 0) {
+        this.client.getRequest('Student/StudentFamily', { studentId: this.request.studentId }).subscribe(response => {
+          this.response = response.responseObj.studentFamilyObj;
+          this.dataSource = new MatTableDataSource(this.response);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+       }
+       else{
+        this.alert.showMessage('First save student information');
+      }
    });
-    this.client.getRequest('Student/StudentFamily', { studentId: this.request.studentId }).subscribe(response => {
-      this.response = response.responseObj.studentFamilyObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    });
   }
 
   register(form: NgForm): void {
@@ -44,7 +49,7 @@ export class StudentFamilyComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       form.resetForm();
       this.request.studentFamilyId = 0;
-      this.alert.openSnackBar(response.errorObj[0].message);
+      this.alert.showMessage(response.errorObj[0].message);
     });
   }
 

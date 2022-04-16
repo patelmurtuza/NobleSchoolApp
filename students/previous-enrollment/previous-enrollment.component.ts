@@ -27,12 +27,17 @@ export class PreviousEnrollmentComponent implements OnInit {
   ngOnInit(): void {
     this.activatedroute.paramMap.subscribe(params => { 
       this.request.studentId = params.get('id');
-  });
-    this.client.getRequest('Student/PreviousEnrollment', { studentId: this.request.studentId }).subscribe(response => {
-      this.response = response.responseObj.previousEnrollmentObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      if(this.request.studentId > 0) {
+        this.client.getRequest('Student/PreviousEnrollment', { studentId: this.request.studentId }).subscribe(response => {
+          this.response = response.responseObj.previousEnrollmentObj;
+          this.dataSource = new MatTableDataSource(this.response);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+      }
+      else{
+        this.alert.showMessage('First save student information');
+      }
     });
   }
 
@@ -44,7 +49,7 @@ export class PreviousEnrollmentComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.request.previousEnrollmentId = 0;
       form.resetForm();      
-      this.alert.openSnackBar(response.errorObj[0].message);
+      this.alert.showMessage(response.errorObj[0].message);
     });
   }
 

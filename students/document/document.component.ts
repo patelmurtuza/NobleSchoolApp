@@ -29,24 +29,31 @@ export class DocumentComponent implements OnInit {
   ngOnInit(): void {
     this.activatedroute.paramMap.subscribe(params => { 
       this.request.studentId = params.get('id');
-  });
-    this.client.getRequest('Student/Document', { studentId: this.request.studentId }).subscribe(response => {
-      this.response = response.responseObj.documentObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      if(this.request.studentId > 0) {
+        this.client.getRequest('Student/Document', { studentId: this.request.studentId }).subscribe(response => {
+          this.response = response.responseObj.documentObj;
+          this.dataSource = new MatTableDataSource(this.response);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+      }
+      else{
+        this.alert.showMessage('First save student information');
+      }
     });
   }
 
   register(form: NgForm): void {
-    this.client.postFormRequest('Student/Document', this.form, this.request, this.request.documentId).subscribe(response => {
+    this.client.postFormRequest('Student/Document', this.form, this.request, this.request.studentDocumentId).subscribe(response => {
       this.response = response.responseObj.documentObj;
       this.dataSource = new MatTableDataSource(this.response);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      this.request.documentId = 0;
+      this.request.studentDocumentId = 0;
       form.resetForm();
-      this.alert.openSnackBar(response.errorObj[0].message);
+      this.form = new FormData();
+      this.fileName = '';
+      this.alert.showMessage(response.errorObj[0].message);
     });
   }
 
@@ -58,7 +65,7 @@ export class DocumentComponent implements OnInit {
   }
 
   onEdit(id: number): void {
-    this.request = this.response.find(x => x.documentId == id);
+    this.request = this.response.find(x => x.studentDocumentId == id);
   }
 
   getFileName(fileName: string) {

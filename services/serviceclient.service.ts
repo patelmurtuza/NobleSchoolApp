@@ -43,10 +43,15 @@ export class ServiceClientService {
     }
   }
 
-  postFormRequest(action: string, form: FormData, request: any, id: number = 0): Observable<any> {
+  postFormRequest(action: string, form: FormData, request: any, id: number = 0, properties: string[] = []): Observable<any> {
     Object.keys(request).forEach((key) => {
       if(request[key]) {
-        form.append(key, request[key]);
+        if(properties.includes(key)) {
+          form.append(key, (new Date(request[key])).toDateString());
+        }
+        else {
+          form.append(key, request[key]);
+        }
       }
     });
     if (id == 0) {
@@ -56,4 +61,9 @@ export class ServiceClientService {
       return this.httpClient.put(environment.endUrl + action + '/' + id, form, { headers: this.httpOptions.headers });
     }
   }
+
+  deleteRequest(action: string, id: number): Observable<any> {
+    return this.httpClient.delete(environment.endUrl + action + '/' + id, { headers: this.httpOptions.headers });
+  }
+
 }

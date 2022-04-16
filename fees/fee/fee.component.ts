@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatRadioChange } from '@angular/material/radio';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
 import { ServiceClientService } from '../../services/serviceclient.service';
-import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
 @Component({
   selector: 'app-fee',
@@ -9,14 +13,41 @@ import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 })
 export class FeeComponent implements OnInit {
 
-  constructor(private client: ServiceClientService, private alert: SnackBarAlertService) { }
+  @ViewChild(MatSort, {static: false}) sort!: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+  
+  constructor(private client: ServiceClientService, private activatedroute: ActivatedRoute) { }
 
+  paid: number = 0;
+  pending: number = 0;
+  term: boolean = false;
   response: any[] = [];
+  dataSource = new MatTableDataSource<any>();
+  cols = [ 'AcademicYear', 'GradeDescription', 'PaymentType', 'RecieptAmt', 'PaymentDate' ];
 
   ngOnInit(): void {
-    this.client.getRequest('Fee/StudentFee', {studentGradeId: 1}).subscribe(response => {
-      this.response = response.responseObj.studentFeeObj;
+    this.activatedroute.paramMap.subscribe(params => { 
+      this.client.getRequest('Fee/StudentFee', { studentId: params.get('id') }).subscribe(response => {
+        this.response = response.responseObj.studentFeeObj;
+        this.paid = this.response.filter(x => x.isPaid).reduce((sum, current) => sum + current.amount, 0);
+      });
+      this.client.getRequest('Fee/StudentFeeCollection', { studentId: params.get('id') }).subscribe(response => {
+        this.dataSource = new MatTableDataSource(response.responseObj.studentFeeCollectionObj);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      });
+      this.dataSource = new MatTableDataSource(this.response);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
+
+  feePayment(): void {
+    
+  }
+
+  termChange(event: MatRadioChange) {
+    this.pending = this.response.slice(0, event.value).reduce((sum, current) => sum + current.amount, 0) - this.paid;
+}
 
 }

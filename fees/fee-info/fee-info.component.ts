@@ -3,27 +3,26 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ServiceClientService } from '../../services/serviceclient.service';
+import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
 @Component({
-  selector: 'app-student-info',
-  templateUrl: './student-info.component.html',
-  styleUrls: ['./student-info.component.scss']
+  selector: 'app-fee-info',
+  templateUrl: './fee-info.component.html',
+  styleUrls: ['./fee-info.component.scss']
 })
-export class StudentInfoComponent implements OnInit {
+export class FeeInfoComponent implements OnInit {
 
   @ViewChild(MatSort, {static: false}) sort!: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
   
   constructor(private client: ServiceClientService) { }
 
-  response: any[] = [];
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'FirstName', 'MiddleName', 'LastName', 'DOB', 'Gender', 'BirthPlace', 'Religion', 'Caste', 'MotherTongue', 'NativePlace', 'Nationality', 'MobileNo', 'EmailAddress', 'ProfilePhotoPath' ];
+  cols = [ 'StudentName', 'RollNo', 'Fee' ];
 
   ngOnInit(): void {
-    this.client.getRequest('Student/Student', null).subscribe(response => {
-      this.response = response.responseObj.studentObj;
-      this.dataSource = new MatTableDataSource(this.response);
+    this.client.getRequest('Student/StudentGradeFee', {}).subscribe(response => {
+      this.dataSource = new MatTableDataSource(response.responseObj.studentGradeObj);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
@@ -31,14 +30,6 @@ export class StudentInfoComponent implements OnInit {
 
   applyFilter(event: Event) {
     this.dataSource.filter = (event.target as HTMLInputElement).value;
-  }
-
-  getFileName(fileName: string) {
-    if(fileName) {
-      const path = fileName.split("/");
-      return path[path.length - 1];
-    }
-    return '';
   }
 
 }

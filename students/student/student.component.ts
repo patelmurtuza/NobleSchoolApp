@@ -1,8 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ServiceClientService } from '../../services/serviceclient.service';
 import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
@@ -13,65 +10,44 @@ import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 })
 export class StudentComponent implements OnInit {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
-  
-  constructor(private client: ServiceClientService, private alert: SnackBarAlertService) { }
+  constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private activatedroute: ActivatedRoute) { }
 
-  response: any[] = [];
   request: any = {};
   form: FormData = new FormData();
   fileName: string = '';
-  dataSource = new MatTableDataSource<any>();
-  cols = [ 'FirstName', 'MiddleName', 'LastName', 'DOB', 'Gender', 'BirthPlace', 'Religion', 'Caste', 'MotherTongue', 'NativePlace', 'Nationality', 'MobileNo', 'EmailAddress', 'ProfilePhotoPath', 'Info' ];
   viewCols = [ 'FullName', 'Family', 'PreviousEnrollment', 'Admission', 'Document', 'Address' ];
 
   ngOnInit(): void {
-    this.request.religion = 'Muslim';
-    this.request.caste = 'General';
-    this.request.motherTongue = 'Urdu';
-    this.request.nationality = 'Indian';
-    this.request.nativePlace = 'Taloja, Navi Mumbai';
-    this.client.getRequest('Student/Student', null).subscribe(response => {
-      this.response = response.responseObj.studentObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+    this.activatedroute.paramMap.subscribe(params => { 
+      this.request.studentId = params.get('id');
+      if(this.request.studentId > 0) {
+        this.client.getRequest('Student/Student', { studentId: this.request.studentId }).subscribe(response => {
+          this.request = response.responseObj.studentObj[0];
+        });
+      }
+      else {
+        this.request.studentId = 0;
+        this.request.religion = 'Muslim';
+        this.request.caste = 'General';
+        this.request.motherTongue = 'Urdu';
+        this.request.nationality = 'Indian';
+        this.request.nativePlace = 'Taloja, Navi Mumbai';
+      }
     });
   }
 
-  register(form: NgForm): void {
-    this.request.dob = (new Date(this.request.dob)).toUTCString();
-    this.client.postFormRequest('Student/Student', this.form, this.request, this.request.studentId).subscribe(response => {
-      this.response = response.responseObj.studentObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      form.resetForm();
-      this.request.studentId = 0;
-      this.alert.openSnackBar(response.errorObj[0].message);
+  register(): void {
+    const prop: string[] = [ "dob" ];
+    this.client.postFormRequest('Student/Student', this.form, this.request, this.request.studentId, prop).subscribe(response => {
+      this.request.studentId = response.responseObj.studentObj[0].studentId;
+      this.fileName = '';
+      this.alert.redirectWithMessage(response.errorObj[0].message, 'student', this.request.studentId);
     });
-  }
-
-  onEdit(id: number): void {
-    this.request = this.response.find(x => x.studentId == id);
   }
 
   onFileSelected(event: any){
     this.fileName = event.srcElement.files[0].name;
     this.form.append('file', event.srcElement.files[0]);
-  }
-
-  applyFilter(event: Event) {
-    this.dataSource.filter = (event.target as HTMLInputElement).value;
-  }
-
-  getFileName(fileName: string) {
-    if(fileName) {
-      const path = fileName.split("/");
-      return path[path.length - 1];
-    }
-    return '';
   }
 
 }

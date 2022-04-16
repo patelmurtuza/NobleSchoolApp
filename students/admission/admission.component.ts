@@ -28,12 +28,17 @@ export class AdmissionComponent implements OnInit {
     this.request.academicYear = "2022 - 2023";
     this.activatedroute.paramMap.subscribe(params => { 
       this.request.studentId = params.get('id');
-  });
-    this.client.getRequest('Student/Admission', { studentId: this.request.studentId }).subscribe(response => {
-      this.response = response.responseObj.admissionObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      if(this.request.studentId > 0) {
+        this.client.getRequest('Student/Admission', { studentId: this.request.studentId }).subscribe(response => {
+          this.response = response.responseObj.admissionObj;
+          this.dataSource = new MatTableDataSource(this.response);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+      }
+      else{
+        this.alert.showMessage('First save student information');
+      }
     });
   }
 
@@ -45,7 +50,7 @@ export class AdmissionComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.request.admissionId = 0;
       form.resetForm();
-      this.alert.openSnackBar(response.errorObj[0].message);
+      this.alert.showMessage(response.errorObj[0].message);
     });
   }
 

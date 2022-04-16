@@ -22,3 +22,8 @@ html, body {
 .mat-header-cell {
   font-weight: bold;
 }
+
+.mat-expansion-panel-header-description {
+  display: flex;
+  justify-content: flex-end;
+}
