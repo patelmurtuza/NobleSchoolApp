@@ -10,6 +10,7 @@ import { NotFoundComponent } from '../not-found/not-found.component';
 import { StudentGradeComponent } from '../students/student-grade/student-grade.component';
 import { FeeComponent } from '../fees/fee/fee.component';
 import { FeeInfoComponent } from '../fees/fee-info/fee-info.component';
+import { ViewFeeComponent } from '../fees/view-fee/view-fee.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
       { path: 'student-grade', component: StudentGradeComponent },
       { path: 'fee-info', component: FeeInfoComponent },
       { path: 'fee/:id', component: FeeComponent },
+      { path: 'view-fee', component: ViewFeeComponent },
       { path: 'error', component: ErrorComponent },
       { path: 'not-found', component: NotFoundComponent },
       { path: '**', redirectTo: 'not-found' }

@@ -13,17 +13,70 @@
             <div>
               <mat-radio-group name="term" [(ngModel)]="term">
                 <mat-radio-button [value]="1" [disabled]="response[0].isPaid" (change)="termChange($event)">Term 1</mat-radio-button>
-                <mat-radio-button [value]="2" (change)="termChange($event)">Term 2</mat-radio-button>
-                <mat-radio-button [value]="3" (change)="termChange($event)">Term 3</mat-radio-button>
+                <mat-radio-button [value]="2" [disabled]="response[1].isPaid" (change)="termChange($event)">Term 2</mat-radio-button>
+                <mat-radio-button [value]="3" [disabled]="response[2].isPaid" (change)="termChange($event)">Term 3</mat-radio-button>
               </mat-radio-group>
-              <button mat-raised-button style="margin-left: 16px" (click)="feePayment()" [disabled]="pending == 0" color="primary"> Payment </button>
-            </div>
-            <div>
-              Total Amount: {{pending}}
             </div>
           </div>
           <div class="col-lg-4">
           </div>
+        </div>
+        <div *ngIf="request.feeCollections.length > 0">
+          <hr />
+        <form #myform="ngForm" (ngSubmit)="myform.valid && feePayment()" novalidate>
+          <table class="table" width="100%">
+            <tr>
+                <th>Payment Type</th>
+                <th>Card Ref No</th>
+                <th>Cheque No</th>
+                <th>Cheque Date</th>
+                <th>Bank Name</th>
+            </tr>
+            <tr *ngFor="let val of request.feeCollections; let i = index">
+                <td>
+                  <mat-form-field>
+                    <mat-label>Payment Type</mat-label>
+                    <mat-select name="request.feeCollections[i].paymentType" required [(ngModel)]="request.feeCollections[i].paymentType">
+                      <mat-option>--Select--</mat-option>
+                      <mat-option value="Cash">Cash</mat-option>
+                      <mat-option value="Card">Card</mat-option>
+                      <mat-option value="Cheque">Cheque</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <input matInput placeholder="Card Ref No" name="request.feeCollections[i].cardRefNo" [required]="request.feeCollections[i].paymentType == 'Card'" [(ngModel)]="request.feeCollections[i].cardRefNo"/>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <input matInput type="number" placeholder="Cheque No" name="request.feeCollections[i].chequeNo" [required]="request.feeCollections[i].paymentType == 'Cheque'" [(ngModel)]="request.feeCollections[i].chequeNo" >
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>Cheque Date</mat-label>
+                    <input matInput [matDatepicker]="chequeDate" name="request.feeCollections[i].chequeDate" [required]="request.feeCollections[i].paymentType == 'Cheque'" [(ngModel)]="request.feeCollections[i].chequeDate">
+                    <mat-datepicker-toggle matSuffix [for]="chequeDate"></mat-datepicker-toggle>
+                    <mat-datepicker #chequeDate></mat-datepicker>
+                </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <input matInput placeholder="Bank Name" [required]="request.feeCollections[i].paymentType == 'Cheque'" [(ngModel)]="request.feeCollections[i].bankName" />
+                  </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+              <td align="right" colspan="3">
+                <b>Total Amount</b>
+              </td>
+              <td><b>{{pending}}</b></td>
+              <td><button mat-raised-button [disabled]="myform.invalid && myform.submitted" color="primary"> Payment </button></td>
+            </tr>
+        </table>
+        </form>
         </div>
         <hr />
     <mat-grid-list cols="3" rowHeight="102px">
@@ -57,10 +110,14 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-        <ng-container matColumnDef="AcademicYear">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Academic Year</th>
-            <td mat-cell *matCellDef="let element">{{ element.academicYear }}</td>
-          </ng-container>
+      <ng-container matColumnDef="StudentName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.studentName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="AcademicYear">
+        <th mat-header-cell *matHeaderCellDef>Academic Year</th>
+        <td mat-cell *matCellDef="let element">{{ element.academicYear }}</td>
+      </ng-container>
       <ng-container matColumnDef="GradeDescription">
           <th mat-header-cell *matHeaderCellDef>Grade Description</th>
           <td mat-cell *matCellDef="let element">{{ element.gradeDescription }}</td>
@@ -76,6 +133,22 @@
           <ng-container matColumnDef="PaymentDate">
             <th mat-header-cell *matHeaderCellDef>Payment Date</th>
             <td mat-cell *matCellDef="let element">{{ element.paymentDate | date:'dd-MMM-yyyy' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="CardRefNo">
+            <th mat-header-cell *matHeaderCellDef>Card Ref No</th>
+            <td mat-cell *matCellDef="let element">{{ element.cardRefNo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ChequeNo">
+            <th mat-header-cell *matHeaderCellDef>Cheque No</th>
+            <td mat-cell *matCellDef="let element">{{ element.chequeNo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ChequeDate">
+            <th mat-header-cell *matHeaderCellDef>Cheque Date</th>
+            <td mat-cell *matCellDef="let element">{{ element.ChequeDate | date:'dd-MMM-yyyy' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="BankName">
+            <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.bankName }}</td>
           </ng-container>
       <tr mat-header-row *matHeaderRowDef="cols"></tr>
       <tr mat-row *matRowDef="let row; columns: cols"></tr>

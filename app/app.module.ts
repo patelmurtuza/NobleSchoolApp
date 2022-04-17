@@ -28,6 +28,7 @@ import { StudentEnquiryComponent } from '../students/student-enquiry/student-enq
 import { LoaderService } from '../services/loader.service';
 import { LoaderInterceptorService } from '../services/loader-interceptor.service';
 import { LoaderComponent } from '../loader/loader.component';
+import { ViewFeeComponent } from '../fees/view-fee/view-fee.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { LoaderComponent } from '../loader/loader.component';
     FeeComponent,
     FeeInfoComponent,
     StudentEnquiryComponent,
-    LoaderComponent
+    LoaderComponent,
+    ViewFeeComponent
   ],
   imports: [
     BrowserModule,
