@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
 import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
@@ -17,14 +18,18 @@ export class AdmissionComponent implements OnInit {
   @ViewChild(MatSort, {static: false}) sort!: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
 
-  constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private activatedroute: ActivatedRoute) { }
+  constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private activatedroute: ActivatedRoute, private master: MasterService) { }
 
   response: any[] = [];
   request: any = {};
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'AdmissionNo', 'AdmissionDate', 'GRNo', 'FormNo', 'AcademicYear', 'GradeDescription', 'Comments' ];
+  cols = [ 'AdmissionNo', 'AdmissionDate', 'GRNo', 'FormNo', 'AcademicYear', 'GradeDescription', 'Comments', 'Edit' ];
+  grade: string[] = [];
+  academicYear: string[] = [];
 
   ngOnInit(): void {
+    this.grade = this.master.getGrade();
+    this.academicYear = this.master.getAcademicYear();
     this.request.academicYear = "2022 - 2023";
     this.activatedroute.paramMap.subscribe(params => { 
       this.request.studentId = params.get('id');

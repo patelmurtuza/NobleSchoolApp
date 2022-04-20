@@ -22,7 +22,7 @@ export class PreviousEnrollmentComponent implements OnInit {
   response: any[] = [];
   request: any = {};
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'InstituteName', 'ExaminationPass', 'Percentage', 'LeavingDate', 'Comments' ];
+  cols = [ 'InstituteName', 'ExaminationPass', 'Percentage', 'LeavingDate', 'Comments', 'Edit' ];
 
   ngOnInit(): void {
     this.activatedroute.paramMap.subscribe(params => { 

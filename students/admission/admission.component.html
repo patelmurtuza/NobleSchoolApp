@@ -1,4 +1,4 @@
-<br />
+<div>
 <mat-accordion>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
@@ -9,7 +9,7 @@
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="AdmissionNo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Admission No</th>
-        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.admissionId)"> {{element.admissionNo}} </a></td>
+        <td mat-cell *matCellDef="let element">{{element.admissionNo}}</td>
       </ng-container>
       <ng-container matColumnDef="AdmissionDate">
           <th mat-header-cell *matHeaderCellDef>Admission Date</th>
@@ -35,6 +35,10 @@
         <th mat-header-cell *matHeaderCellDef>Comments</th>
         <td mat-cell *matCellDef="let element">{{ element.comments }}</td>
       </ng-container>
+      <ng-container matColumnDef="Edit">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element"> <a [routerLink]="['/student', element.studentId]" (click)="onEdit(element.admissionId)"><mat-icon>edit</mat-icon></a></td>
+      </ng-container>
       <tr mat-header-row *matHeaderRowDef="cols"></tr>
       <tr mat-row *matRowDef="let row; columns: cols"></tr>
     </table>
@@ -58,7 +62,9 @@
                   <mat-label>Academic Year</mat-label>
                   <mat-select name="academicYear" required [(ngModel)]="request.academicYear">
                     <mat-option>--Select--</mat-option>
-                    <mat-option value="2022 - 2023">2022 - 2023</mat-option>
+                    <mat-option *ngFor="let value of academicYear" [value]="value">
+                      {{value}}
+                    </mat-option>
                   </mat-select>
                   <mat-error>Please select Academic Year</mat-error>
                 </mat-form-field>
@@ -68,12 +74,9 @@
                 <mat-label>Grade Description</mat-label>
                 <mat-select name="gradeDescription" required [(ngModel)]="request.gradeDescription">
                   <mat-option>--Select--</mat-option>
-                  <mat-option value="Nursery">Nursery</mat-option>
-                  <mat-option value="Jr. KG">Jr. KG</mat-option>
-                  <mat-option value="Sr. KG">Sr. KG</mat-option>
-                  <mat-option value="Std I">Std I</mat-option>
-                  <mat-option value="Std II">Std II</mat-option>
-                  <mat-option value="Std III">Std III</mat-option>
+                  <mat-option *ngFor="let value of grade" [value]="value">
+                    {{value}}
+                  </mat-option>
                 </mat-select>
                 <mat-error>Please select Grade Description</mat-error>
               </mat-form-field>
@@ -107,3 +110,4 @@
     </div>
   </mat-expansion-panel>
 </mat-accordion>
+</div>

@@ -18,10 +18,10 @@ export class FeeInfoComponent implements OnInit {
   constructor(private client: ServiceClientService) { }
 
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'StudentName', 'RollNo', 'Fee' ];
+  cols = [ 'StudentName', 'RollNo', 'GradeDescription', 'Section', 'AcademicYear', 'Fee' ];
 
   ngOnInit(): void {
-    this.client.getRequest('Student/StudentGradeFee', {}).subscribe(response => {
+    this.client.getRequest('Student/StudentGrade', { academicYear: '2022 - 2023' }).subscribe(response => {
       this.dataSource = new MatTableDataSource(response.responseObj.studentGradeObj);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

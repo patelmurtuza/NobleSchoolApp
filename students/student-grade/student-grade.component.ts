@@ -4,6 +4,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
 import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
@@ -17,7 +18,7 @@ export class StudentGradeComponent implements OnInit {
   @ViewChild(MatSort, {static: false}) sort!: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
 
-  constructor(private client: ServiceClientService, private alert: SnackBarAlertService) { }
+  constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private master: MasterService) { }
 
   isDisabled: boolean = true;
   checkedAll: boolean = false;
@@ -26,9 +27,13 @@ export class StudentGradeComponent implements OnInit {
   dataSource = new MatTableDataSource<any>();
   dataSourceGrade = new MatTableDataSource<any>();
   cols = [ 'Checked', 'StudentName' ];
-  colsGrade = [ 'StudentName', 'RollNo', 'GradeDescription', 'AcademicYear' ];
+  colsGrade = [ 'StudentName', 'RollNo', 'GradeDescription', 'Section', 'AcademicYear' ];
+  academicYear: string[] = [];
+  grade: string[] = [];
 
   ngOnInit(): void {
+    this.academicYear = this.master.getAcademicYear();
+    this.grade = this.master.getGrade();
     this.request.academicYear = "2022 - 2023";
     this.client.getRequest('Student/StudentGrade', {}).subscribe(response => {
       this.dataSourceGrade = new MatTableDataSource(response.responseObj.studentGradeObj);
@@ -38,7 +43,7 @@ export class StudentGradeComponent implements OnInit {
   }
 
   search(): void {
-    this.client.getRequest('Student/StudentGrade', { academicYear: this.request.academicYear, gradeDescription: this.request.gradeDescription }).subscribe(response => {
+    this.client.getRequest('Student/StudentGrade', { academicYear: this.request.academicYear, gradeDescription: this.request.gradeDescription, section: 'N/A' }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
         this.response = response.responseObj.studentGradeObj;
         this.response.forEach(function(part, index, theArray) {

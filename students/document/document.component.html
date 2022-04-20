@@ -1,4 +1,4 @@
-<br />
+<div>
 <mat-accordion>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
@@ -9,15 +9,19 @@
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="DocumentType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Type</th>
-        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.studentDocumentId)"> {{element.documentType}} </a></td>
+        <td mat-cell *matCellDef="let element">{{element.documentType}}</td>
       </ng-container>
       <ng-container matColumnDef="DocumentPath">
           <th mat-header-cell *matHeaderCellDef>Document Name</th>
-          <td mat-cell *matCellDef="let element"><a [href]="element.documentPath" target="_blank">{{ getFileName(element.documentPath) }}</a></td>
+          <td mat-cell *matCellDef="let element"><a *ngIf="element.documentPath"  [href]="element.documentPath" target="_blank"><mat-icon>cloud_download</mat-icon></a></td>
         </ng-container>
       <ng-container matColumnDef="Comments">
         <th mat-header-cell *matHeaderCellDef>Comments</th>
         <td mat-cell *matCellDef="let element">{{ element.comments }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Edit">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element"> <a [routerLink]="['/student', element.studentId]" (click)="onEdit(element.studentDocumentId)"><mat-icon>edit</mat-icon></a></td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="cols"></tr>
       <tr mat-row *matRowDef="let row; columns: cols"></tr>
@@ -42,13 +46,9 @@
                     <mat-label>Document Type</mat-label>
                     <mat-select name="documentType" required [(ngModel)]="request.documentType">
                       <mat-option>--Select--</mat-option>
-                      <mat-option value="Birth Certificate">Birth Certificate</mat-option>
-                      <mat-option value="Leaving Certificate">Leaving Certificate</mat-option>
-                      <mat-option value="Child's Aadhaar Card">Child's Aadhaar Card</mat-option>
-                      <mat-option value="Previous Marksheet">Previous Marksheet</mat-option>
-                      <mat-option value="Parent's Aadhaar Card">Parent's Aadhaar Card</mat-option>
-                      <mat-option value="Passport Photograph">Passport Photograph</mat-option>
-                      <mat-option value="Undertaking">Undertaking</mat-option>
+                      <mat-option *ngFor="let value of document" [value]="value">
+                        {{value}}
+                      </mat-option>
                     </mat-select>
                     <mat-error>Please select Document Type</mat-error>
                   </mat-form-field>
@@ -77,3 +77,4 @@
     </div>
   </mat-expansion-panel>
 </mat-accordion>
+</div>

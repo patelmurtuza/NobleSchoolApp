@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
 import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
@@ -17,16 +18,18 @@ export class DocumentComponent implements OnInit {
   @ViewChild(MatSort, {static: false}) sort!: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
 
-  constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private activatedroute: ActivatedRoute) { }
+  constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private activatedroute: ActivatedRoute, private master: MasterService) { }
 
   response: any[] = [];
   request: any = {};
   form: FormData = new FormData();
   fileName: string = '';
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'DocumentType', 'DocumentPath', 'Comments' ];
+  cols = [ 'DocumentType', 'DocumentPath', 'Comments', 'Edit' ];
+  document: string[] = [];
 
   ngOnInit(): void {
+    this.document = this.master.getStudentDocument();
     this.activatedroute.paramMap.subscribe(params => { 
       this.request.studentId = params.get('id');
       if(this.request.studentId > 0) {
@@ -66,14 +69,6 @@ export class DocumentComponent implements OnInit {
 
   onEdit(id: number): void {
     this.request = this.response.find(x => x.studentDocumentId == id);
-  }
-
-  getFileName(fileName: string) {
-    if(fileName) {
-      const path = fileName.split("/");
-      return path[path.length - 1];
-    }
-    return '';
   }
 
 }

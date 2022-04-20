@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
 import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
@@ -10,14 +11,18 @@ import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 })
 export class StudentComponent implements OnInit {
 
-  constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private activatedroute: ActivatedRoute) { }
+  constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private activatedroute: ActivatedRoute, private master: MasterService, private route: Router) { }
 
   request: any = {};
   form: FormData = new FormData();
   fileName: string = '';
   viewCols = [ 'FullName', 'Family', 'PreviousEnrollment', 'Admission', 'Document', 'Address' ];
+  religion: string[] = [];
+  caste: string[] = [];
 
   ngOnInit(): void {
+    this.religion = this.master.getReligion();
+    this.caste = this.master.getCaste();
     this.activatedroute.paramMap.subscribe(params => { 
       this.request.studentId = params.get('id');
       if(this.request.studentId > 0) {
@@ -41,7 +46,8 @@ export class StudentComponent implements OnInit {
     this.client.postFormRequest('Student/Student', this.form, this.request, this.request.studentId, prop).subscribe(response => {
       this.request.studentId = response.responseObj.studentObj[0].studentId;
       this.fileName = '';
-      this.alert.redirectWithMessage(response.errorObj[0].message, 'student', this.request.studentId);
+      this.alert.showMessage(response.errorObj[0].message);
+      this.route.navigate(['student', this.request.studentId]);
     });
   }
 

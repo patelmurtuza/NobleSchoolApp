@@ -1,4 +1,4 @@
-<br />
+<div>
 <mat-accordion>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
@@ -9,18 +9,30 @@
     <mat-form-field>
       <input matInput placeholder="Search here" (keyup)="applyFilter($event)">
     </mat-form-field>
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="StudentName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
         <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
       </ng-container>
       <ng-container matColumnDef="RollNo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Roll No</th>
-        <td mat-cell *matCellDef="let element"> {{element.rollNo == 0 ? '' : element.rollNo}} </td>
+          <th mat-header-cell *matHeaderCellDef>Roll No</th>
+          <td mat-cell *matCellDef="let element">{{ element.rollNo == 0 ? '' : element.rollNo }}</td>
+        </ng-container>
+      <ng-container matColumnDef="GradeDescription">
+        <th mat-header-cell *matHeaderCellDef>Grade Description</th>
+        <td mat-cell *matCellDef="let element">{{ element.gradeDescription }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Section">
+        <th mat-header-cell *matHeaderCellDef>Section</th>
+        <td mat-cell *matCellDef="let element">{{ element.section }}</td>
+      </ng-container>
+      <ng-container matColumnDef="AcademicYear">
+        <th mat-header-cell *matHeaderCellDef>Academic Year</th>
+        <td mat-cell *matCellDef="let element">{{ element.academicYear }}</td>
       </ng-container>
       <ng-container matColumnDef="Fee">
-        <th mat-header-cell *matHeaderCellDef>View Fee</th>
-        <td mat-cell *matCellDef="let element"> <a [routerLink]="['/fee', element.studentId]">Fee</a> </td>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element"> <a [routerLink]="['/fee', element.studentId]"><mat-icon>visibility</mat-icon></a> </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="cols"></tr>
       <tr mat-row *matRowDef="let row; columns: cols"></tr>
@@ -28,3 +40,4 @@
     <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons ></mat-paginator>
   </mat-expansion-panel>
 </mat-accordion>
+</div>

@@ -4,7 +4,9 @@ import { MatRadioChange } from '@angular/material/radio';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
+import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
 @Component({
   selector: 'app-fee',
@@ -16,16 +18,15 @@ export class FeeComponent implements OnInit {
   @ViewChild(MatSort, {static: false}) sort!: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
   
-  constructor(private client: ServiceClientService, private activatedroute: ActivatedRoute, private router: Router) { }
+  constructor(private client: ServiceClientService, private activatedroute: ActivatedRoute, private alert: SnackBarAlertService) { }
 
   request: any = { feeCollections: [] };
   paid: number = 0;
   pending: number = 0;
-  term: boolean = false;
   response: any[] = [];
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'StudentName', 'AcademicYear', 'GradeDescription', 'PaymentType', 'RecieptAmt', 'PaymentDate', 'CardRefNo', 'ChequeNo', 'ChequeDate', 'BankName' ];
-  options: string[] = ['Axis Bank Ltd', 'Bandhan Bank Ltd', 'HDFC Bank Ltd', 'ICICI Bank Ltd', 'YES Bank Ltd', 'IDBI Bank Limited', 'State Bank of India', '	Union Bank of India'];
+  cols = [ 'StudentName', 'AcademicYear', 'GradeDescription', 'PaymentType', 'RecieptAmt', 'PaymentDate', 'TransactionalID', 'ChequeNo', 'ChequeDate', 'BankName', 'TermPeriod', 'View' ];
+  isBacklog: boolean = false;
 
   ngOnInit(): void {
     this.activatedroute.paramMap.subscribe(params => { 
@@ -35,9 +36,13 @@ export class FeeComponent implements OnInit {
         this.paid = this.response.filter(x => x.isPaid).reduce((sum, current) => sum + current.amount, 0);
         this.pending = 0;
         this.request.studentGradeId = this.response[0].studentGradeId;
-        this.dataSource = new MatTableDataSource(response.responseObj.studentFeeCollectionObj);
+        this.dataSource = new MatTableDataSource(response.responseObj.feeCollectionObj);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        this.isBacklog = response.responseObj.isBacklog;
+        if(this.isBacklog) {
+          this.alert.showAlert('Blacklog fee is pending for previous academic years');
+        }
       });
     });
   }
@@ -46,17 +51,17 @@ export class FeeComponent implements OnInit {
     const terms = this.response.filter(x => !x.isPaid);
     for (let i = 0; i < this.request.feeCollections.length; i++) {
       this.request.feeCollections[i].recieptAmt = terms[i].amount;
+      this.request.feeCollections[i].termPeriod = this.response.filter(x => x.isPaid).length + i + 1;
     }
-    this.client.postBodyRequest('Fee/StudentFeeCollection', this.request).subscribe(response => {
+    this.client.postBodyRequest('Fee/FeeCollection', this.request).subscribe(response => {
       this.response = response.responseObj.studentFeeObj;
       this.paid = this.response.filter(x => x.isPaid).reduce((sum, current) => sum + current.amount, 0);
       this.request.studentGradeId = this.response[0].studentGradeId;
-      this.dataSource = new MatTableDataSource(response.responseObj.studentFeeCollectionObj);
+      this.dataSource = new MatTableDataSource(response.responseObj.feeCollectionObj);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.request.feeCollections = [];
-      this.term = false;
-      this.router.navigate([]).then(result => {  window.open('view-fee', '_blank'); });
+      this.alert.showMessage(response.errorObj[0].message);
     });
   }
 

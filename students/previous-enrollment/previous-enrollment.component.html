@@ -1,4 +1,4 @@
-<br />
+<div>
 <mat-accordion>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
@@ -9,7 +9,7 @@
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="InstituteName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Institute Name</th>
-        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.previousEnrollmentId)"> {{element.instituteName}} </a></td>
+        <td mat-cell *matCellDef="let element">{{element.instituteName}}</td>
       </ng-container>
       <ng-container matColumnDef="ExaminationPass">
         <th mat-header-cell *matHeaderCellDef>Examination Pass</th>
@@ -26,6 +26,10 @@
       <ng-container matColumnDef="Comments">
         <th mat-header-cell *matHeaderCellDef>Comments</th>
         <td mat-cell *matCellDef="let element">{{ element.comments }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Edit">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element"> <a [routerLink]="['/student', element.studentId]" (click)="onEdit(element.previousEnrollmentId)"><mat-icon>edit</mat-icon></a></td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="cols"></tr>
       <tr mat-row *matRowDef="let row; columns: cols"></tr>
@@ -92,3 +96,4 @@
     </div>
   </mat-expansion-panel>
 </mat-accordion>
+</div>

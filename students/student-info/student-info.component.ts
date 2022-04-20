@@ -18,7 +18,7 @@ export class StudentInfoComponent implements OnInit {
 
   response: any[] = [];
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'FirstName', 'MiddleName', 'LastName', 'DOB', 'Gender', 'BirthPlace', 'Religion', 'Caste', 'MotherTongue', 'NativePlace', 'Nationality', 'MobileNo', 'EmailAddress', 'ProfilePhotoPath' ];
+  cols = [ 'FirstName', 'MiddleName', 'LastName', 'DOB', 'Gender', 'BirthPlace', 'Religion', 'Caste', 'MotherTongue', 'NativePlace', 'Nationality', 'MobileNo', 'EmailAddress', 'ProfilePhotoPath', 'View' ];
 
   ngOnInit(): void {
     this.client.getRequest('Student/Student', null).subscribe(response => {
@@ -31,14 +31,6 @@ export class StudentInfoComponent implements OnInit {
 
   applyFilter(event: Event) {
     this.dataSource.filter = (event.target as HTMLInputElement).value;
-  }
-
-  getFileName(fileName: string) {
-    if(fileName) {
-      const path = fileName.split("/");
-      return path[path.length - 1];
-    }
-    return '';
   }
 
 }

@@ -1,17 +1,22 @@
 <mat-nav-list>
-    <mat-list-item>
-        <a [routerLink]="['/student-info']">
-            <span>Student Info</span>
-        </a>
+    <mat-list-item [routerLink]="['/student-info']" [routerLinkActive]="['active']">
+        <mat-icon [class.active]="true" matListIcon>account_box</mat-icon>
+		    <a>Student Info</a>
     </mat-list-item>
-    <mat-list-item>
-        <a [routerLink]="['/fee-info']">
-            <span>Fee Info</span>
-        </a>
+    <mat-list-item [routerLink]="['/fee-info']" [routerLinkActive]="['active']">
+        <mat-icon matListIcon>receipt</mat-icon>
+		    <a>Fee Info</a>
     </mat-list-item>
-    <mat-list-item>
-        <a [routerLink]="['/student-grade']">
-            <span>Student Grade</span>
-        </a>
+    <mat-list-item [routerLink]="['/student-grade']" [routerLinkActive]="['active']">
+        <mat-icon matListIcon>home</mat-icon>
+		    <a>Student Grade</a>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/admission-details']" [routerLinkActive]="['active']">
+        <mat-icon matListIcon>home</mat-icon>
+		    <a>Admission Info</a>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/grade-details']" [routerLinkActive]="['active']">
+        <mat-icon matListIcon>home</mat-icon>
+		    <a>Grade Info</a>
     </mat-list-item>
 </mat-nav-list>

@@ -22,9 +22,10 @@ export class StudentFamilyComponent implements OnInit {
   response: any[] = [];
   request: any = {};
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'FullName', 'Relation', 'Qualification', 'Occupation', 'Designation', 'MobileNo', 'EmailAddress', 'MonthlyIncome', 'OfficeAddress' ];
+  cols = [ 'FullName', 'Relation', 'Qualification', 'Occupation', 'Designation', 'MobileNo', 'EmailAddress', 'MonthlyIncome', 'OfficeAddress', 'Edit' ];
 
   ngOnInit(): void {
+    this.request.relation = 'Father';
     this.activatedroute.paramMap.subscribe(params => { 
        this.request.studentId = params.get('id');
        if(this.request.studentId > 0) {

@@ -29,6 +29,9 @@ import { LoaderService } from '../services/loader.service';
 import { LoaderInterceptorService } from '../services/loader-interceptor.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { ViewFeeComponent } from '../fees/view-fee/view-fee.component';
+import { GradeDetailsComponent } from '../reports/grade-details/grade-details.component';
+import { MaterialTableComponent } from '../common/material-table/material-table.component';
+import { AdmissionDetailsComponent } from '../reports/admission-details/admission-details.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +54,10 @@ import { ViewFeeComponent } from '../fees/view-fee/view-fee.component';
     FeeInfoComponent,
     StudentEnquiryComponent,
     LoaderComponent,
-    ViewFeeComponent
+    ViewFeeComponent,
+    GradeDetailsComponent,
+    MaterialTableComponent,
+    AdmissionDetailsComponent
   ],
   imports: [
     BrowserModule,

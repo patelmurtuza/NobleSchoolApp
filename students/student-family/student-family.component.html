@@ -1,4 +1,4 @@
-<br />
+<div>
 <mat-accordion>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
@@ -9,7 +9,7 @@
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="FullName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
-      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="onEdit(element.studentFamilyId)"> {{element.fullName}} </a></td>
+      <td mat-cell *matCellDef="let element">{{element.fullName}}</td>
     </ng-container>
     <ng-container matColumnDef="Relation">
       <th mat-header-cell *matHeaderCellDef>Relation</th>
@@ -40,11 +40,15 @@
       <td mat-cell *matCellDef="let element">{{ element.monthlyIncome }}</td>
     </ng-container>
     <ng-container matColumnDef="OfficeAddress">
-      <th mat-header-cell *matHeaderCellDef>OfficeAddress</th>
+      <th mat-header-cell *matHeaderCellDef>Office Address</th>
       <td mat-cell *matCellDef="let element">{{ element.officeAddress }}</td>
     </ng-container>
+    <ng-container matColumnDef="Edit">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element"> <a [routerLink]="['/student', element.studentId]" (click)="onEdit(element.studentFamilyId)"><mat-icon>edit</mat-icon></a></td>
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="cols"></tr>
-    <tr mat-row *matRowDef="let row; columns: cols"></tr>
+    <tr mat-row *matRowDef="let row; columns: cols"></tr> 
   </table>
   <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons ></mat-paginator>
   </mat-expansion-panel>
@@ -149,3 +153,4 @@
     </div>
   </mat-expansion-panel>
 </mat-accordion>
+</div>

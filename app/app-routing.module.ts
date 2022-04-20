@@ -11,10 +11,13 @@ import { StudentGradeComponent } from '../students/student-grade/student-grade.c
 import { FeeComponent } from '../fees/fee/fee.component';
 import { FeeInfoComponent } from '../fees/fee-info/fee-info.component';
 import { ViewFeeComponent } from '../fees/view-fee/view-fee.component';
+import { GradeDetailsComponent } from '../reports/grade-details/grade-details.component';
+import { AdmissionDetailsComponent } from '../reports/admission-details/admission-details.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'view-fee/:id', component: ViewFeeComponent },
   { path: '', component: FullComponent, 
     children: [
       { path: 'student-info', component: StudentInfoComponent },
@@ -23,7 +26,8 @@ const routes: Routes = [
       { path: 'student-grade', component: StudentGradeComponent },
       { path: 'fee-info', component: FeeInfoComponent },
       { path: 'fee/:id', component: FeeComponent },
-      { path: 'view-fee', component: ViewFeeComponent },
+      { path: 'grade-details', component: GradeDetailsComponent },
+      { path: 'admission-details', component: AdmissionDetailsComponent },
       { path: 'error', component: ErrorComponent },
       { path: 'not-found', component: NotFoundComponent },
       { path: '**', redirectTo: 'not-found' }
