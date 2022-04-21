@@ -35,21 +35,28 @@ export class GradeDetailsComponent implements OnInit {
       this.tabArray.push('Nursery');
     }
     this.client.getRequest('Student/StudentGrade', { academicYear: '2022 - 2023' }).subscribe(response => {
-      this.response = response.responseObj.studentGradeObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.filter = this.tabName;
+      if(response.errorObj[0].code == 0) {
+        this.response = response.responseObj.studentGradeObj;
+        this.dataSource = new MatTableDataSource(this.response);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.filter = this.tabName;
+      }
     });
   }
 
   tabYear(tab: MatTabChangeEvent) {
     this.tabIndex = tab.index;
     this.tabName = this.tabArray[this.tabIndex];
-    this.dataSource = new MatTableDataSource(this.response.filter(x => x.academicYear == tab.tab.textLabel && x.gradeDescription == this.tabName));
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.filter = this.search;
+    this.client.getRequest('Student/StudentGrade', { academicYear: tab.tab.textLabel }).subscribe(response => {
+      if(response.errorObj[0].code == 0) {
+        this.response = response.responseObj.studentGradeObj;
+        this.dataSource = new MatTableDataSource(this.response.filter(x => x.gradeDescription == this.tabName));
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.filter = this.search;
+      }
+    });
   }
 
   tabGrade(tab: MatTabChangeEvent) {

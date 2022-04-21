@@ -36,9 +36,11 @@ export class StudentGradeComponent implements OnInit {
     this.grade = this.master.getGrade();
     this.request.academicYear = "2022 - 2023";
     this.client.getRequest('Student/StudentGrade', {}).subscribe(response => {
-      this.dataSourceGrade = new MatTableDataSource(response.responseObj.studentGradeObj);
-      this.dataSourceGrade.sort = this.sort;
-      this.dataSourceGrade.paginator = this.paginator;
+      if(response.errorObj[0].code == 0) {
+        this.dataSourceGrade = new MatTableDataSource(response.responseObj.studentGradeObj);
+        this.dataSourceGrade.sort = this.sort;
+        this.dataSourceGrade.paginator = this.paginator;
+      }
     });
   }
 

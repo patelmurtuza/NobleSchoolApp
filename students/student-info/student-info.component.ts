@@ -16,16 +16,16 @@ export class StudentInfoComponent implements OnInit {
   
   constructor(private client: ServiceClientService) { }
 
-  response: any[] = [];
   dataSource = new MatTableDataSource<any>();
   cols = [ 'FirstName', 'MiddleName', 'LastName', 'DOB', 'Gender', 'BirthPlace', 'Religion', 'Caste', 'MotherTongue', 'NativePlace', 'Nationality', 'MobileNo', 'EmailAddress', 'ProfilePhotoPath', 'View' ];
 
   ngOnInit(): void {
     this.client.getRequest('Student/Student', null).subscribe(response => {
-      this.response = response.responseObj.studentObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      if(response.errorObj[0].code == 0) {
+        this.dataSource = new MatTableDataSource(response.responseObj.studentObj);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      }
     });
   }
 

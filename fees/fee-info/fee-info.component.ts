@@ -22,9 +22,11 @@ export class FeeInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.client.getRequest('Student/StudentGrade', { academicYear: '2022 - 2023' }).subscribe(response => {
-      this.dataSource = new MatTableDataSource(response.responseObj.studentGradeObj);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      if(response.errorObj[0].code == 0) {
+        this.dataSource = new MatTableDataSource(response.responseObj.studentGradeObj);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      }
     });
   }
 

@@ -30,10 +30,12 @@ export class StudentFamilyComponent implements OnInit {
        this.request.studentId = params.get('id');
        if(this.request.studentId > 0) {
         this.client.getRequest('Student/StudentFamily', { studentId: this.request.studentId }).subscribe(response => {
-          this.response = response.responseObj.studentFamilyObj;
-          this.dataSource = new MatTableDataSource(this.response);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          if(response.errorObj[0].code == 0) {
+            this.response = response.responseObj.studentFamilyObj;
+            this.dataSource = new MatTableDataSource(this.response);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+          }
         });
        }
        else{
