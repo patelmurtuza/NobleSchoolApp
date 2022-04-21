@@ -25,7 +25,7 @@ export class FeeComponent implements OnInit {
   pending: number = 0;
   response: any[] = [];
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'StudentName', 'AcademicYear', 'GradeDescription', 'PaymentType', 'RecieptAmt', 'PaymentDate', 'TransactionalID', 'ChequeNo', 'ChequeDate', 'BankName', 'TermPeriod', 'View' ];
+  cols = [ 'StudentName', 'AcademicYear', 'GradeDescription', 'PaymentType', 'RecieptAmt', 'PaymentDate', 'TransactionalID', 'ChequeNo', 'ChequeDate', 'BankName', 'TermPeriod', 'Discount', 'View' ];
   isBacklog: boolean = false;
 
   ngOnInit(): void {
