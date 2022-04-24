@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,23 +8,34 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './material-table.component.html',
   styleUrls: ['./material-table.component.scss']
 })
-export class MaterialTableComponent implements OnInit {
+export class MaterialTableComponent implements OnInit, OnChanges {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
-  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
-  @Input() columns: string[] = [];
-  @Input() response: any[] = [];
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @Input() table: any = {};
 
   constructor() { }
 
-  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
-  displayedColumns: string[] = [];
-  
-  ngOnInit(): void {
-    this.displayedColumns = this.columns;
-    this.dataSource = new MatTableDataSource<any>(this.response);
+  ngOnChanges(changes: SimpleChanges): void {
+    this.dataSource = new MatTableDataSource(this.table.rows);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+  }
+
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+  displayedColumns: string[] = [];
+  columns: any[] = [];
+  
+  ngOnInit(): void {
+    this.columns = this.table.columns;
+    this.displayedColumns = this.columns.map(x => x.columnDef);
+    this.dataSource = new MatTableDataSource(this.table.rows);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(event: Event) {
+    this.dataSource.filter = (event.target as HTMLInputElement).value;
   }
 
 }

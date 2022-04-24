@@ -13,20 +13,20 @@ import { ServiceClientService } from '../../services/serviceclient.service';
 })
 export class GradeDetailsComponent implements OnInit {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
-  
   constructor(private client: ServiceClientService, private master: MasterService) { }
 
   academicYear: string[] = [];
   grade: string[] = [];
-  cols = [ 'StudentName', 'RollNo', 'GradeDescription', 'Section', 'AcademicYear', 'Fee' ];
-  dataSource = new MatTableDataSource<any>();
   response: any[] = [];
-  search: string = '';
   tabArray: string[] = [];
   tabName: string = 'Nursery';
   tabIndex: number = 0;
+  table: any = { rows: [], columns: [
+    { columnDef: 'studentName', header: 'Student Name' },
+    { columnDef: 'rollNo', header: 'Roll No' },
+    { columnDef: 'section', header: 'Section' },
+    { columnDef: 'view', header: '', url: 'fee', route: 'studentId' }
+  ] };
 
   ngOnInit(): void {
     this.academicYear = this.master.getAcademicYear();
@@ -34,13 +34,11 @@ export class GradeDetailsComponent implements OnInit {
     for (let i = 0; i < this.academicYear.length; i++) {
       this.tabArray.push('Nursery');
     }
-    this.client.getRequest('Student/StudentGrade', { academicYear: '2022 - 2023' }).subscribe(response => {
+    this.client.getRequest('Student/StudentGrade', { academicYear: this.academicYear[0] }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
         this.response = response.responseObj.studentGradeObj;
-        this.dataSource = new MatTableDataSource(this.response);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.filter = this.tabName;
+        this.table.rows = this.response.filter(x => x.gradeDescription == this.tabName);
+        this.table = {... this.table};
       }
     });
   }
@@ -51,25 +49,16 @@ export class GradeDetailsComponent implements OnInit {
     this.client.getRequest('Student/StudentGrade', { academicYear: tab.tab.textLabel }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
         this.response = response.responseObj.studentGradeObj;
-        this.dataSource = new MatTableDataSource(this.response.filter(x => x.gradeDescription == this.tabName));
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.filter = this.search;
+        this.table.rows = this.response.filter(x => x.gradeDescription == this.tabName);
+        this.table = {... this.table};
       }
     });
   }
 
   tabGrade(tab: MatTabChangeEvent) {
     this.tabName = this.tabArray[this.tabIndex] = tab.tab.textLabel;
-    this.dataSource = new MatTableDataSource(this.response.filter(x => x.gradeDescription == this.tabName));
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.filter = this.search;
-  }
-
-  applyFilter(event: Event) {
-    this.search = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = this.search;
+    this.table.rows = this.response.filter(x => x.gradeDescription == this.tabName);
+    this.table = {... this.table};
   }
 
 }

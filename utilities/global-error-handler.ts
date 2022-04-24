@@ -11,7 +11,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     
     handleError(error: Error) {
         if(environment.production) {
-            console.log(error.message)
+            console.log(error.message);
             return this.router.navigate(['error']);
         }
         return error;

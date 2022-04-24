@@ -1,1 +1,16 @@
-<p>admission-details works!</p>
+<mat-tab-group (selectedTabChange)="tabYear($event)">
+    <mat-tab *ngFor="let year of academicYear" [label]="year">
+<div>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h1>Admission Details</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-material-table [table]="table"></app-material-table>
+      </mat-expansion-panel>
+    </mat-accordion>
+</div>
+</mat-tab>
+</mat-tab-group>

@@ -1,8 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
@@ -15,9 +13,6 @@ import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 })
 export class StudentGradeComponent implements OnInit {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
-
   constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private master: MasterService) { }
 
   isDisabled: boolean = true;
@@ -25,21 +20,25 @@ export class StudentGradeComponent implements OnInit {
   request: any = {};
   response: any[] = [];
   dataSource = new MatTableDataSource<any>();
-  dataSourceGrade = new MatTableDataSource<any>();
   cols = [ 'Checked', 'StudentName' ];
-  colsGrade = [ 'StudentName', 'RollNo', 'GradeDescription', 'Section', 'AcademicYear' ];
+  table: any = { rows: [], columns: [
+    { columnDef: 'studentName', header: 'Student Name' },
+    { columnDef: 'rollNo', header: 'Roll No' },
+    { columnDef: 'gradeDescription', header: 'Grade Description' },
+    { columnDef: 'section', header: 'Section' },
+    { columnDef: 'academicYear', header: 'Academic Year' }
+  ] };
   academicYear: string[] = [];
   grade: string[] = [];
 
   ngOnInit(): void {
     this.academicYear = this.master.getAcademicYear();
     this.grade = this.master.getGrade();
-    this.request.academicYear = "2022 - 2023";
+    this.request.academicYear = this.academicYear[0];
     this.client.getRequest('Student/StudentGrade', {}).subscribe(response => {
       if(response.errorObj[0].code == 0) {
-        this.dataSourceGrade = new MatTableDataSource(response.responseObj.studentGradeObj);
-        this.dataSourceGrade.sort = this.sort;
-        this.dataSourceGrade.paginator = this.paginator;
+        this.table.rows = response.responseObj.studentGradeObj;
+        this.table = {... this.table};
       }
     });
   }
@@ -65,9 +64,7 @@ export class StudentGradeComponent implements OnInit {
     const grade = this.response.filter(x => x.checked).sort((a, b) => (a.studentName < b.studentName ? -1 : 1));
     this.request.studentGrades = grade.map(x => x.studentGradeId);
     this.client.postBodyRequest('Student/StudentGrade', this.request).subscribe(response => {
-      this.dataSourceGrade = new MatTableDataSource(response.responseObj.studentGradeObj);
-      this.dataSourceGrade.sort = this.sort;
-      this.dataSourceGrade.paginator = this.paginator;
+      this.table.rows = response.responseObj.studentGradeObj;
       this.alert.showMessage(response.errorObj[0].message);
       this.response = [];
       this.dataSource = new MatTableDataSource(this.response);
@@ -96,10 +93,6 @@ export class StudentGradeComponent implements OnInit {
     this.response[index].checked = ob.checked;
     this.checkedAll = this.response.filter(x => x.checked).length == this.response.length;
     this.isDisabled = this.response.filter(x => x.checked).length == 0;
-  }
-
-  applyFilter(event: Event) {
-    this.dataSourceGrade.filter = (event.target as HTMLInputElement).value;
   }
 
 }

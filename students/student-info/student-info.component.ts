@@ -1,7 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
 import { ServiceClientService } from '../../services/serviceclient.service';
 
 @Component({
@@ -11,26 +8,33 @@ import { ServiceClientService } from '../../services/serviceclient.service';
 })
 export class StudentInfoComponent implements OnInit {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
-  
   constructor(private client: ServiceClientService) { }
 
-  dataSource = new MatTableDataSource<any>();
-  cols = [ 'FirstName', 'MiddleName', 'LastName', 'DOB', 'Gender', 'BirthPlace', 'Religion', 'Caste', 'MotherTongue', 'NativePlace', 'Nationality', 'MobileNo', 'EmailAddress', 'ProfilePhotoPath', 'View' ];
+  table: any = { rows: [], columns: [
+    { columnDef: 'firstName', header: 'First Name' },
+    { columnDef: 'middleName', header: 'Middle Name' },
+    { columnDef: 'lastName', header: 'Last Name' },
+    { columnDef: 'dob', header: 'Date of Birth', datePipe: true },
+    { columnDef: 'gender', header: 'Gender' },
+    { columnDef: 'birthPlace', header: 'Birth Place' },
+    { columnDef: 'religion', header: 'Religion' },
+    { columnDef: 'caste', header: 'Caste' },
+    { columnDef: 'motherTongue', header: 'Mother Tongue' },
+    { columnDef: 'nativePlace', header: 'Native Place' },
+    { columnDef: 'nationality', header: 'Nationality' },
+    { columnDef: 'mobileNo', header: 'Mobile No' },
+    { columnDef: 'emailAddress', header: 'Email Address' },
+    { columnDef: 'profilePhotoPath', header: 'Profile Photo', file: true },
+    { columnDef: 'view', header: '', view: true, url: 'student', route: 'studentId' }
+  ] };
 
   ngOnInit(): void {
     this.client.getRequest('Student/Student', null).subscribe(response => {
       if(response.errorObj[0].code == 0) {
-        this.dataSource = new MatTableDataSource(response.responseObj.studentObj);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.table.rows = response.responseObj.studentObj;
+        this.table = {... this.table};
       }
     });
-  }
-
-  applyFilter(event: Event) {
-    this.dataSource.filter = (event.target as HTMLInputElement).value;
   }
 
 }

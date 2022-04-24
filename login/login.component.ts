@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
   request: any = {};
 
   ngOnInit(): void {
+    this.request.email = 'noufil.namare@gmail.com';
+    this.request.password = 'pass@2022';
   }
 
   submit() : void {

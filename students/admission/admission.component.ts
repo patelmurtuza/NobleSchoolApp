@@ -30,7 +30,7 @@ export class AdmissionComponent implements OnInit {
   ngOnInit(): void {
     this.grade = this.master.getGrade();
     this.academicYear = this.master.getAcademicYear();
-    this.request.academicYear = "2022 - 2023";
+    this.request.academicYear = this.academicYear[0];
     this.activatedroute.paramMap.subscribe(params => { 
       this.request.studentId = params.get('id');
       if(this.request.studentId > 0) {

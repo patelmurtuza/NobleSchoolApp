@@ -41,7 +41,7 @@ export class MasterService {
     for (let i = 2022; i <= current; i++) {
       year.push(`${i} - ${i+1}`);
     }
-    return year;
+    return year.sort((one, two) => (one > two ? -1 : 1));
   }
 
 }

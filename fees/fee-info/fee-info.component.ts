@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
+import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
-import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
 @Component({
   selector: 'app-fee-info',
@@ -12,26 +9,26 @@ import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 })
 export class FeeInfoComponent implements OnInit {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
-  
-  constructor(private client: ServiceClientService) { }
+  constructor(private client: ServiceClientService, private master: MasterService) { }
 
-  dataSource = new MatTableDataSource<any>();
-  cols = [ 'StudentName', 'RollNo', 'GradeDescription', 'Section', 'AcademicYear', 'Fee' ];
+  table: any = { rows: [], columns: [
+    { columnDef: 'studentName', header: 'Student Name' },
+    { columnDef: 'rollNo', header: 'Roll No' },
+    { columnDef: 'gradeDescription', header: 'Grade Description' },
+    { columnDef: 'section', header: 'Section' },
+    { columnDef: 'academicYear', header: 'Academic Year' },
+    { columnDef: 'view', header: '', view: true, url: 'fee', route: 'studentId' }
+  ] };
+  academicYear: string[] = [];
 
   ngOnInit(): void {
-    this.client.getRequest('Student/StudentGrade', { academicYear: '2022 - 2023' }).subscribe(response => {
+    this.academicYear = this.master.getAcademicYear();
+    this.client.getRequest('Student/StudentGrade', { academicYear: this.academicYear[0] }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
-        this.dataSource = new MatTableDataSource(response.responseObj.studentGradeObj);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.table.rows = response.responseObj.studentGradeObj;
+        this.table = {... this.table};
       }
     });
-  }
-
-  applyFilter(event: Event) {
-    this.dataSource.filter = (event.target as HTMLInputElement).value;
   }
 
 }
