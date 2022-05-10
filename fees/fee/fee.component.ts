@@ -1,10 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, OnInit } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
 import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 
@@ -15,17 +11,27 @@ import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 })
 export class FeeComponent implements OnInit {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
-  
   constructor(private client: ServiceClientService, private activatedroute: ActivatedRoute, private alert: SnackBarAlertService) { }
 
   request: any = { feeCollections: [] };
   paid: number = 0;
   pending: number = 0;
   response: any[] = [];
-  dataSource = new MatTableDataSource<any>();
-  cols = [ 'StudentName', 'AcademicYear', 'GradeDescription', 'PaymentType', 'RecieptAmt', 'PaymentDate', 'TransactionalID', 'ChequeNo', 'ChequeDate', 'BankName', 'TermPeriod', 'Discount', 'View' ];
+  table: any = { rows: [], columns: [
+    { columnDef: 'studentName', header: 'Student Name' },
+    { columnDef: 'academicYear', header: 'Academic Year' },
+    { columnDef: 'gradeDescription', header: 'Grade Description' },
+    { columnDef: 'paymentType', header: 'Payment Type' },
+    { columnDef: 'recieptAmt', header: 'Reciept Amount' },
+    { columnDef: 'paymentDate', header: 'Payment Date', datePipe: true },
+    { columnDef: 'transactionalID', header: 'Transactional ID' },
+    { columnDef: 'chequeNo', header: 'Cheque No' },
+    { columnDef: 'chequeDate', header: 'Cheque Date', datePipe: true },
+    { columnDef: 'bankName', header: 'Bank Name' },
+    { columnDef: 'termPeriod', header: 'Term Period' },
+    { columnDef: 'discount', header: 'Discount %' },
+    { columnDef: 'view', header: '', tab: true, url: 'view-fee', route: 'feeCollectionId' }
+  ] };
   isBacklog: boolean = false;
 
   ngOnInit(): void {
@@ -36,9 +42,8 @@ export class FeeComponent implements OnInit {
         this.paid = this.response.filter(x => x.isPaid).reduce((sum, current) => sum + current.amount, 0);
         this.pending = 0;
         this.request.studentGradeId = this.response[0].studentGradeId;
-        this.dataSource = new MatTableDataSource(response.responseObj.feeCollectionObj);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.table.rows = response.responseObj.feeCollectionObj;
+        this.table = {... this.table};
         this.isBacklog = response.responseObj.isBacklog;
         if(this.isBacklog) {
           this.alert.showAlert('Blacklog fee is pending for previous academic years');
@@ -57,9 +62,8 @@ export class FeeComponent implements OnInit {
       this.response = response.responseObj.studentFeeObj;
       this.paid = this.response.filter(x => x.isPaid).reduce((sum, current) => sum + current.amount, 0);
       this.request.studentGradeId = this.response[0].studentGradeId;
-      this.dataSource = new MatTableDataSource(response.responseObj.feeCollectionObj);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.table.rows = response.responseObj.feeCollectionObj;
+      this.table = {... this.table};
       this.request.feeCollections = [];
       this.alert.showMessage(response.errorObj[0].message);
     });

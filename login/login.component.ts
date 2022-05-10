@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
       if(response.errorObj[0].code == 0) {
         localStorage.setItem('accessToken', response.responseObj.tokenObj.accessToken);
         localStorage.setItem('refreshToken', response.responseObj.tokenObj.refreshToken);
-        this.router.navigate(['/student-info']);
+        this.router.navigate(['/dashboard']);
       }
       else {
         this.alert.showMessage(response.errorObj[0].message);

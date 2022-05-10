@@ -32,6 +32,9 @@ import { ViewFeeComponent } from '../fees/view-fee/view-fee.component';
 import { GradeDetailsComponent } from '../reports/grade-details/grade-details.component';
 import { MaterialTableComponent } from '../common/material-table/material-table.component';
 import { AdmissionDetailsComponent } from '../reports/admission-details/admission-details.component';
+import { FeeStructureComponent } from '../masters/fee-structure/fee-structure.component';
+import { FeeDetailsComponent } from '../reports/fee-details/fee-details.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,10 @@ import { AdmissionDetailsComponent } from '../reports/admission-details/admissio
     ViewFeeComponent,
     GradeDetailsComponent,
     MaterialTableComponent,
-    AdmissionDetailsComponent
+    AdmissionDetailsComponent,
+    FeeStructureComponent,
+    FeeDetailsComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

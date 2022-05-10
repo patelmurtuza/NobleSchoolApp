@@ -1,4 +1,8 @@
 <mat-nav-list>
+    <mat-list-item [routerLink]="['/dashboard']" [routerLinkActive]="['active']">
+        <mat-icon [class.active]="true" matListIcon>dashboard</mat-icon>
+		    <a>Dashboard</a>
+    </mat-list-item>
     <mat-list-item [routerLink]="['/student-info']" [routerLinkActive]="['active']">
         <mat-icon [class.active]="true" matListIcon>account_box</mat-icon>
 		    <a>Student Info</a>
@@ -18,5 +22,13 @@
     <mat-list-item [routerLink]="['/grade-details']" [routerLinkActive]="['active']">
         <mat-icon matListIcon>home</mat-icon>
 		    <a>Grade Info</a>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/fee-details']" [routerLinkActive]="['active']">
+        <mat-icon matListIcon>receipt</mat-icon>
+		    <a>Fee Details</a>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/fee-structure']" [routerLinkActive]="['active']">
+        <mat-icon matListIcon>receipt</mat-icon>
+		    <a>Fee Structure</a>
     </mat-list-item>
 </mat-nav-list>

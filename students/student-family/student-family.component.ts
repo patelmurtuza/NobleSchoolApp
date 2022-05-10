@@ -1,8 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { ServiceClientService } from '../../services/serviceclient.service';
 import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
@@ -14,15 +11,21 @@ import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 })
 export class StudentFamilyComponent implements OnInit {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
-
   constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private activatedroute: ActivatedRoute) { }
 
-  response: any[] = [];
   request: any = {};
-  dataSource = new MatTableDataSource<any>();
-  cols = [ 'FullName', 'Relation', 'Qualification', 'Occupation', 'Designation', 'MobileNo', 'EmailAddress', 'MonthlyIncome', 'OfficeAddress', 'Edit' ];
+  table: any = { rows: [], columns: [
+    { columnDef: 'fullName', header: 'Full Name' },
+    { columnDef: 'relation', header: 'Relation' },
+    { columnDef: 'qualification', header: 'Qualification' },
+    { columnDef: 'occupation', header: 'Occupation' },
+    { columnDef: 'designation', header: 'Designation' },
+    { columnDef: 'mobileNo', header: 'MobileNo' },
+    { columnDef: 'emailAddress', header: 'Email Address' },
+    { columnDef: 'monthlyIncome', header: 'Monthly Income' },
+    { columnDef: 'officeAddress', header: 'Office Address' },
+    { columnDef: 'edit', header: '', edit: true, url: 'student', route: 'studentId' }
+  ] };
 
   ngOnInit(): void {
     this.request.relation = 'Father';
@@ -31,10 +34,8 @@ export class StudentFamilyComponent implements OnInit {
        if(this.request.studentId > 0) {
         this.client.getRequest('Student/StudentFamily', { studentId: this.request.studentId }).subscribe(response => {
           if(response.errorObj[0].code == 0) {
-            this.response = response.responseObj.studentFamilyObj;
-            this.dataSource = new MatTableDataSource(this.response);
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
+            this.table.rows = response.responseObj.studentFamilyObj;
+            this.table = {... this.table};
           }
         });
        }
@@ -46,18 +47,16 @@ export class StudentFamilyComponent implements OnInit {
 
   register(form: NgForm): void {
     this.client.postBodyRequest('Student/StudentFamily', this.request, this.request.studentFamilyId).subscribe(response => {
-      this.response = response.responseObj.studentFamilyObj;
-      this.dataSource = new MatTableDataSource(this.response);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.table.rows = response.responseObj.studentFamilyObj;
+      this.table = {... this.table};
       form.resetForm();
       this.request.studentFamilyId = 0;
       this.alert.showMessage(response.errorObj[0].message);
     });
   }
 
-  onEdit(id: number): void {
-    this.request = this.response.find(x => x.studentFamilyId == id);
+  editItem(item: any): void {
+    this.request = item;
   }
 
 }

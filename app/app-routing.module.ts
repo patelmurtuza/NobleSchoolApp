@@ -13,6 +13,9 @@ import { FeeInfoComponent } from '../fees/fee-info/fee-info.component';
 import { ViewFeeComponent } from '../fees/view-fee/view-fee.component';
 import { GradeDetailsComponent } from '../reports/grade-details/grade-details.component';
 import { AdmissionDetailsComponent } from '../reports/admission-details/admission-details.component';
+import { FeeStructureComponent } from '../masters/fee-structure/fee-structure.component';
+import { FeeDetailsComponent } from '../reports/fee-details/fee-details.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -20,6 +23,7 @@ const routes: Routes = [
   { path: 'view-fee/:id', component: ViewFeeComponent },
   { path: '', component: FullComponent, 
     children: [
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'student-info', component: StudentInfoComponent },
       { path: 'student', component: StudentEnquiryComponent },
       { path: 'student/:id', component: StudentEnquiryComponent },
@@ -28,6 +32,8 @@ const routes: Routes = [
       { path: 'fee/:id', component: FeeComponent },
       { path: 'grade-details', component: GradeDetailsComponent },
       { path: 'admission-details', component: AdmissionDetailsComponent },
+      { path: 'fee-details', component: FeeDetailsComponent },
+      { path: 'fee-structure', component: FeeStructureComponent },
       { path: 'error', component: ErrorComponent },
       { path: 'not-found', component: NotFoundComponent },
       { path: '**', redirectTo: 'not-found' }

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,6 +13,7 @@ export class MaterialTableComponent implements OnInit, OnChanges {
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @Input() table: any = {};
+  @Output() editItem = new EventEmitter<any>();
 
   constructor() { }
 
@@ -36,6 +37,10 @@ export class MaterialTableComponent implements OnInit, OnChanges {
 
   applyFilter(event: Event) {
     this.dataSource.filter = (event.target as HTMLInputElement).value;
+  }
+
+  onEdit(index: number): void {
+    this.editItem.emit(this.table.rows[index]);
   }
 
 }

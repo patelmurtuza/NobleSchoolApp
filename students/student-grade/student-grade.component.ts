@@ -35,7 +35,7 @@ export class StudentGradeComponent implements OnInit {
     this.academicYear = this.master.getAcademicYear();
     this.grade = this.master.getGrade();
     this.request.academicYear = this.academicYear[0];
-    this.client.getRequest('Student/StudentGrade', {}).subscribe(response => {
+    this.client.getRequest('Student/StudentGrade', { academicYear: this.request.academicYear, section: 'N/A' }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
         this.table.rows = response.responseObj.studentGradeObj;
         this.table = {... this.table};
@@ -65,6 +65,7 @@ export class StudentGradeComponent implements OnInit {
     this.request.studentGrades = grade.map(x => x.studentGradeId);
     this.client.postBodyRequest('Student/StudentGrade', this.request).subscribe(response => {
       this.table.rows = response.responseObj.studentGradeObj;
+      this.table = {... this.table};
       this.alert.showMessage(response.errorObj[0].message);
       this.response = [];
       this.dataSource = new MatTableDataSource(this.response);

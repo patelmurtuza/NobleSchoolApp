@@ -1,0 +1,93 @@
+<div>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h1>Fee Structure Information</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <form #myform="ngForm" (ngSubmit)="myform.valid" novalidate>
+            <div class="row">
+              <div class="col-lg-4">
+                <div>
+                  <mat-form-field>
+                      <mat-label>Academic Year</mat-label>
+                      <mat-select name="academicYear" required [(ngModel)]="request.academicYear">
+                        <mat-option>--Select--</mat-option>
+                        <mat-option *ngFor="let value of academicYear" [value]="value">
+                          {{value}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error>Please select Academic Year</mat-error>
+                    </mat-form-field>
+              </div>
+              </div>
+              <div class="col-lg-4">
+                <div>
+                  <mat-form-field>
+                      <mat-label>Grade Description</mat-label>
+                      <mat-select name="gradeDescription" required [(ngModel)]="request.gradeDescription">
+                        <mat-option>--Select--</mat-option>
+                        <mat-option *ngFor="let value of grade" [value]="value">
+                          {{value}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error>Please select Grade Description</mat-error>
+                    </mat-form-field>
+              </div>
+              </div>
+              <div class="col-lg-4">
+                <button mat-raised-button style="margin-right: 16px" (click)="search()" color="primary" [disabled]="myform.invalid && myform.submitted" > Search </button>
+                <button mat-raised-button style="margin-right: 16px" (click)="clear(myform)" type="reset" color="warn"> Reset </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <table class="table" width="100%">
+            <tr>
+                <th>Fee Type Description</th>
+                <th>Amount</th>
+                <th>First Term</th>
+                <th>Second Term</th>
+                <th>Third Term</th>
+                <th>Required</th>
+            </tr>
+            <tr *ngFor="let val of request.feeStructures; let i = index">
+                <td>
+                  <mat-form-field>
+                    <mat-label>Fee Type Description</mat-label>
+                    <mat-select name="request.feeStructures[i].feeTypeDescription" required [(ngModel)]="request.feeStructures[i].feeTypeDescription">
+                      <mat-option>--Select--</mat-option>
+                      <mat-option value="Tution Fee">Tution Fee</mat-option>
+                      <mat-option value="Term Fee">Term Fee</mat-option>
+                      <mat-option value="Miscellaneous Fee">Miscellaneous Fee</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <input matInput type="number" required placeholder="Amount" name="request.feeStructures[i].amount" [(ngModel)]="request.feeStructures[i].amount" >
+                  </mat-form-field>
+                </td>
+                <td>
+                    <mat-checkbox [(ngModel)]="request.feeStructures[i].isFirstTerm"></mat-checkbox>
+                </td>
+                <td>
+                    <mat-checkbox [(ngModel)]="request.feeStructures[i].isSecondTerm"></mat-checkbox>
+                </td>
+                <td>
+                    <mat-checkbox [(ngModel)]="request.feeStructures[i].isThirdTerm"></mat-checkbox>
+                </td>
+                <td>
+                    <mat-checkbox [(ngModel)]="request.feeStructures[i].isRequired"></mat-checkbox>
+                    <a style="margin-left: 16px" *ngIf="i == request.feeStructures.length - 1" [routerLink]="['/fee-structure']" (click)="onAddRow()"><mat-icon>add_box</mat-icon></a>
+                </td>
+            </tr>
+        </table>
+        <div *ngIf="request.feeStructures.length > 0">
+          <button mat-raised-button style="margin-right: 16px" (click)="register()" type="submit" color="primary"> Save </button>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    </div>
