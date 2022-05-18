@@ -4,11 +4,11 @@ import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
 
 @Component({
-  selector: 'app-fee-details',
-  templateUrl: './fee-details.component.html',
-  styleUrls: ['./fee-details.component.scss']
+  selector: 'app-fee-due',
+  templateUrl: './fee-due.component.html',
+  styleUrls: ['./fee-due.component.scss']
 })
-export class FeeDetailsComponent implements OnInit {
+export class FeeDueComponent implements OnInit {
 
   constructor(private client: ServiceClientService, private master: MasterService) { }
 
@@ -20,16 +20,12 @@ export class FeeDetailsComponent implements OnInit {
   tabIndex: number = 0;
   table: any = { rows: [], columns: [
     { columnDef: 'studentName', header: 'Student Name' },
-    { columnDef: 'recieptNo', header: 'Reciept No' },
-    { columnDef: 'paymentType', header: 'Payment Type' },
+    { columnDef: 'rollNo', header: 'Roll No' },
+    { columnDef: 'section', header: 'Section' },
+    { columnDef: 'emailAddress', header: 'Email Address' },
+    { columnDef: 'mobileNo', header: 'Mobile No' },
     { columnDef: 'recieptAmt', header: 'Reciept Amount' },
-    { columnDef: 'paymentDate', header: 'Payment Date', datePipe: true },
-    { columnDef: 'transactionalID', header: 'Transactional ID' },
-    { columnDef: 'chequeNo', header: 'Cheque No' },
-    { columnDef: 'chequeDate', header: 'Cheque Date', datePipe: true },
-    { columnDef: 'bankName', header: 'Bank Name' },
     { columnDef: 'recieptType', header: 'Reciept Type' },
-    { columnDef: 'discount', header: 'Discount %' }
   ] };
   total: number = 0;
 
@@ -39,9 +35,9 @@ export class FeeDetailsComponent implements OnInit {
     for (let i = 0; i < this.academicYear.length; i++) {
       this.tabArray.push('Nursery');
     }
-    this.client.getRequest('Fee/FeeCollection', { academicYear: this.academicYear[0] }).subscribe(response => {
+    this.client.getRequest('Fee/StudentDueFee', { academicYear: this.academicYear[0] }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
-        this.response = response.responseObj.feeCollectionObj;
+        this.response = response.responseObj.studentDueFeeObj;
         this.table.rows = this.response.filter(x => x.gradeDescription == this.tabName);
         this.table = {... this.table};
         this.total = this.table.rows.reduce((sum:number, current:any) => sum + current.recieptAmt, 0);
@@ -52,9 +48,9 @@ export class FeeDetailsComponent implements OnInit {
   tabYear(tab: MatTabChangeEvent) {
     this.tabIndex = tab.index;
     this.tabName = this.tabArray[this.tabIndex];
-    this.client.getRequest('Fee/FeeCollection', { academicYear: tab.tab.textLabel }).subscribe(response => {
+    this.client.getRequest('Fee/StudentDueFee', { academicYear: tab.tab.textLabel }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
-        this.response = response.responseObj.feeCollectionObj;
+        this.response = response.responseObj.studentDueFeeObj;
       }
       else {
         this.response = [];

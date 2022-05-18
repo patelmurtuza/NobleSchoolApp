@@ -23,16 +23,18 @@ export class FeeStructureComponent implements OnInit {
     this.request.academicYear = this.academicYear[0];
   }
 
-  search(): void {
-    this.client.getRequest('Master/StandardFee', { academicYear: this.request.academicYear, gradeDescription: this.request.gradeDescription }).subscribe(response => {
-      if(response.errorObj[0].code == 0) {
-        this.request.feeStructures = response.responseObj.standardFeeObj;
-      }
-      else {
-        this.request.feeStructures = [];
-        this.request.feeStructures[0] = {};
-      }
-    });
+  search(form: NgForm): void {
+    if(form.valid) {
+      this.client.getRequest('Master/StandardFee', { academicYear: this.request.academicYear, gradeDescription: this.request.gradeDescription }).subscribe(response => {
+        if(response.errorObj[0].code == 0) {
+          this.request.feeStructures = response.responseObj.standardFeeObj;
+        }
+        else {
+          this.request.feeStructures = [];
+          this.request.feeStructures[0] = {};
+        }
+      });
+    }
   }
 
   clear(form: NgForm): void {

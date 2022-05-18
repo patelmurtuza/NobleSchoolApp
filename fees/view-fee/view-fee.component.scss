@@ -1,3 +1,5 @@
-div.solid {
-  border-style: solid;
+@media print {
+  .noprint {
+     visibility: hidden;
+  }
 }

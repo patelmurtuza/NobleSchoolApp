@@ -15,11 +15,11 @@
         <div *ngIf="column.file">
           <a *ngIf="element[column.columnDef]" [href]="element[column.columnDef]" target="_blank"><mat-icon>cloud_download</mat-icon></a>
         </div>
-        <div *ngIf="column.tab">
-          <a [routerLink]="['/'+column.url+'', element[column.route]]" target="_blank"> <mat-icon>print</mat-icon> </a>
+        <div *ngIf="column.model">
+          <a href="javascript:void(0)" (click)="openDialog(element[column.route], column.component)"> <mat-icon>visibility</mat-icon> </a>
         </div>
         <div *ngIf="column.edit">
-          <a [routerLink]="['/'+column.url+'', element[column.route]]" (click)="onEdit(i)"> <mat-icon>edit</mat-icon> </a>
+          <a href="javascript:void(0)" (click)="onEdit(element[column.pk], column.pk)"> <mat-icon>edit</mat-icon> </a>
         </div>
         <div *ngIf="!column.datePipe && !column.file">
           {{ element[column.columnDef] }} 

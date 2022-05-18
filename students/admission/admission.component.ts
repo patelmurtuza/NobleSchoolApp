@@ -25,7 +25,7 @@ export class AdmissionComponent implements OnInit {
     { columnDef: 'academicYear', header: 'Academic Year' },
     { columnDef: 'gradeDescription', header: 'Grade Description' },
     { columnDef: 'comments', header: 'Comments' },
-    { columnDef: 'edit', header: '', edit: true, url: 'student', route: 'studentId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'admissionId' }
   ] };
 
   ngOnInit(): void {

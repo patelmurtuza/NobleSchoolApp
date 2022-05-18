@@ -22,7 +22,7 @@ export class DocumentComponent implements OnInit {
     { columnDef: 'documentType', header: 'Document Type' },
     { columnDef: 'comments', header: 'Comments' },
     { columnDef: 'documentPath', header: 'Document', file: true },
-    { columnDef: 'edit', header: '', edit: true, url: 'student', route: 'studentId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'studentDocumentId' }
   ] };
 
   ngOnInit(): void {

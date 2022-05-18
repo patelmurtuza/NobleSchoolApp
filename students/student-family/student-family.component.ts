@@ -24,7 +24,7 @@ export class StudentFamilyComponent implements OnInit {
     { columnDef: 'emailAddress', header: 'Email Address' },
     { columnDef: 'monthlyIncome', header: 'Monthly Income' },
     { columnDef: 'officeAddress', header: 'Office Address' },
-    { columnDef: 'edit', header: '', edit: true, url: 'student', route: 'studentId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'studentFamilyId' }
   ] };
 
   ngOnInit(): void {

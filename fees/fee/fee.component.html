@@ -8,17 +8,45 @@
     </mat-expansion-panel-header>
       <div *ngIf="!isBacklog" class="row">
           <div class="col-lg-4">
-          </div>
-          <div class="col-lg-4">
             <div>
-              <mat-radio-group name="term">
-                <mat-radio-button value="1" (change)="termChange($event)">Term 1</mat-radio-button>
-                <mat-radio-button value="2" (change)="termChange($event)">Term 2</mat-radio-button>
-                <mat-radio-button value="3" (change)="termChange($event)">Term 3</mat-radio-button>
-              </mat-radio-group>
+              <mat-form-field>
+                <mat-label>Fee Term</mat-label>
+                <mat-select name="term" (selectionChange)="termChange($event.value)">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option *ngFor="let term of terms" [value]="term.value">
+                    {{term.text}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
           <div class="col-lg-4">
+            <div>
+              <mat-form-field>
+                <mat-label>School Uniform</mat-label>
+                <mat-select (selectionChange)="otherFees($event.value, 'Uniform')">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option value="1">One</mat-option>
+                  <mat-option value="2">Two</mat-option>
+                  <mat-option value="3">Three</mat-option>
+                  <mat-option value="4">Four</mat-option>
+                  <mat-option value="5">Five</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div>
+              <mat-form-field>
+                <mat-label>Books</mat-label>
+                <mat-select (selectionChange)="otherFees($event.value, 'Book')">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option value="1">One</mat-option>
+                  <mat-option value="2">Two</mat-option>
+                  <mat-option value="3">Three</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
         </div>
         <div *ngIf="request.feeCollections.length > 0">
@@ -26,6 +54,7 @@
         <form #myform="ngForm" (ngSubmit)="myform.valid && feePayment()" novalidate>
           <table class="table" width="100%">
             <tr>
+                <th>Reciept Type</th>
                 <th>Payment Type</th>
                 <th>Transactional ID</th>
                 <th>Cheque No</th>
@@ -33,6 +62,9 @@
                 <th>Bank Name</th>
             </tr>
             <tr *ngFor="let val of request.feeCollections; let i = index">
+                <td>
+                  <mat-label>{{request.feeCollections[i].recieptType}}</mat-label>
+                </td>
                 <td>
                   <mat-form-field>
                     <mat-label>Payment Type</mat-label>
@@ -69,10 +101,10 @@
                 </td>
             </tr>
             <tr>
-              <td align="right" colspan="3">
+              <td align="right" colspan="4">
                 <b>Total Amount</b>
               </td>
-              <td><b>{{pending}}</b></td>
+              <td><b>{{amount}}</b></td>
               <td><button mat-raised-button [disabled]="myform.invalid && myform.submitted" color="primary"> Payment </button></td>
             </tr>
         </table>

@@ -17,8 +17,12 @@ export class DashboardComponent implements OnInit {
     const gradeDescription = this.master.getGrade();
     this.client.getRequest('Dashboard/Dashboard', { academicYear: '2022 - 2023' }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
+        let i = 1;
         gradeDescription.forEach(function (value: string) {
-          feeData.push({y: response.responseObj.feeCollectionObj.filter((x: any) => x.gradeDescription == value).reduce((sum: number, current: any) => sum + current.recieptAmt, 0), label: value});
+          feeData.push({y: response.responseObj.feeCollectionObj.filter((x: any) => x.gradeDescription == value && x.recieptType.includes('Term')).reduce((sum: number, current: any) => sum + current.recieptAmt, 0), x: i, name: 'Term', xValueFormatString: value});
+          feeData.push({y: response.responseObj.feeCollectionObj.filter((x: any) => x.gradeDescription == value && x.recieptType == 'Uniform').reduce((sum: number, current: any) => sum + current.recieptAmt, 0), x: i, name: 'Uniform', xValueFormatString: value});
+          feeData.push({y: response.responseObj.feeCollectionObj.filter((x: any) => x.gradeDescription == value && x.recieptType == 'Book').reduce((sum: number, current: any) => sum + current.recieptAmt, 0), x: i, name: 'Book', xValueFormatString: value});
+          i++;
         });
       }
 
@@ -27,10 +31,31 @@ export class DashboardComponent implements OnInit {
         title: {
           text: `Fee Collection - ${response.responseObj.feeCollectionObj.reduce((sum: number, current: any) => sum + current.recieptAmt, 0)}`
         },
-        data: [{
-          type: "column",
-          dataPoints: feeData
-        }]
+        toolTip: {
+          shared: true
+        },
+        axisX: {
+          labelFormatter: function(e){
+            return gradeDescription[e.value - 1];
+          }
+        },
+        data: [
+          {
+            type: "stackedColumn",
+            name: 'Term',
+            dataPoints: feeData.filter(x => x.name == 'Term')
+          },
+          {
+            type: "stackedColumn",
+            name: 'Term',
+            dataPoints: feeData.filter(x => x.name == 'Uniform')
+          },
+          {
+            type: "stackedColumn",
+            name: 'Book',
+            dataPoints: feeData.filter(x => x.name == 'Book')
+          }
+      ]
       });
       feeChart.render();
 

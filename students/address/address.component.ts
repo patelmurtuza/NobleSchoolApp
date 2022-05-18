@@ -24,7 +24,7 @@ export class AddressComponent implements OnInit {
     { columnDef: 'city', header: 'City' },
     { columnDef: 'state', header: 'State' },
     { columnDef: 'zipCode', header: 'Zip Code' },
-    { columnDef: 'edit', header: '', edit: true, url: 'student', route: 'studentId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'addressId' }
   ] };
 
   ngOnInit(): void {

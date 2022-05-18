@@ -20,7 +20,7 @@ export class PreviousEnrollmentComponent implements OnInit {
     { columnDef: 'percentage', header: 'Percentage' },
     { columnDef: 'leavingDate', header: 'Leaving Date', datePipe: true },
     { columnDef: 'comments', header: 'Comments' },
-    { columnDef: 'edit', header: '', edit: true, url: 'student', route: 'studentId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'previousEnrollmentId' }
   ] };
 
   ngOnInit(): void {

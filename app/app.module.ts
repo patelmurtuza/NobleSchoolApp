@@ -35,6 +35,7 @@ import { AdmissionDetailsComponent } from '../reports/admission-details/admissio
 import { FeeStructureComponent } from '../masters/fee-structure/fee-structure.component';
 import { FeeDetailsComponent } from '../reports/fee-details/fee-details.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { FeeDueComponent } from '../reports/fee-due/fee-due.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
     AdmissionDetailsComponent,
     FeeStructureComponent,
     FeeDetailsComponent,
-    DashboardComponent
+    DashboardComponent,
+    FeeDueComponent
   ],
   imports: [
     BrowserModule,

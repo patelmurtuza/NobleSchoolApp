@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ViewFeeComponent } from '../../fees/view-fee/view-fee.component';
 
 @Component({
   selector: 'app-material-table',
@@ -15,7 +17,7 @@ export class MaterialTableComponent implements OnInit, OnChanges {
   @Input() table: any = {};
   @Output() editItem = new EventEmitter<any>();
 
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.table.rows);
@@ -39,8 +41,15 @@ export class MaterialTableComponent implements OnInit, OnChanges {
     this.dataSource.filter = (event.target as HTMLInputElement).value;
   }
 
-  onEdit(index: number): void {
-    this.editItem.emit(this.table.rows[index]);
+  onEdit(id: number, pk: string): void {
+    this.editItem.emit(this.table.rows[this.table.rows.findIndex((x: any) => x[pk] == id)]);
+  }
+
+  openDialog(id: number, component: any): void {
+    this.dialog.open(component, {
+      width: '75%',
+      data: {id: id},
+    });
   }
 
 }

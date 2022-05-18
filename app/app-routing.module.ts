@@ -10,17 +10,16 @@ import { NotFoundComponent } from '../not-found/not-found.component';
 import { StudentGradeComponent } from '../students/student-grade/student-grade.component';
 import { FeeComponent } from '../fees/fee/fee.component';
 import { FeeInfoComponent } from '../fees/fee-info/fee-info.component';
-import { ViewFeeComponent } from '../fees/view-fee/view-fee.component';
 import { GradeDetailsComponent } from '../reports/grade-details/grade-details.component';
 import { AdmissionDetailsComponent } from '../reports/admission-details/admission-details.component';
 import { FeeStructureComponent } from '../masters/fee-structure/fee-structure.component';
 import { FeeDetailsComponent } from '../reports/fee-details/fee-details.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { FeeDueComponent } from '../reports/fee-due/fee-due.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'view-fee/:id', component: ViewFeeComponent },
   { path: '', component: FullComponent, 
     children: [
       { path: 'dashboard', component: DashboardComponent },
@@ -33,6 +32,7 @@ const routes: Routes = [
       { path: 'grade-details', component: GradeDetailsComponent },
       { path: 'admission-details', component: AdmissionDetailsComponent },
       { path: 'fee-details', component: FeeDetailsComponent },
+      { path: 'fee-due', component: FeeDueComponent },
       { path: 'fee-structure', component: FeeStructureComponent },
       { path: 'error', component: ErrorComponent },
       { path: 'not-found', component: NotFoundComponent },

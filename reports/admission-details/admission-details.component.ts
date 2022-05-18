@@ -18,6 +18,7 @@ export class AdmissionDetailsComponent implements OnInit {
   tabArray: string[] = [];
   tabName: string = 'Nursery';
   tabIndex: number = 0;
+  total: number = 0;
   table: any = { rows: [], columns: [
     { columnDef: 'studentName', header: 'Student Name' },
     { columnDef: 'mobileNo', header: 'Mobile No' },
@@ -39,6 +40,7 @@ export class AdmissionDetailsComponent implements OnInit {
         this.response = response.responseObj.studentAdmissionObj;
         this.table.rows = this.response.filter(x => x.gradeDescription == this.tabName);
         this.table = {... this.table};
+        this.total = this.table.rows.length;
       }
     });
   }
@@ -55,6 +57,7 @@ export class AdmissionDetailsComponent implements OnInit {
       }
       this.table.rows = this.response.filter(x => x.gradeDescription == this.tabName);
       this.table = {... this.table};
+      this.total = this.table.rows.length;
     });
   }
 
@@ -62,6 +65,7 @@ export class AdmissionDetailsComponent implements OnInit {
     this.tabName = this.tabArray[this.tabIndex] = tab.tab.textLabel;
     this.table.rows = this.response.filter(x => x.gradeDescription == this.tabName);
     this.table = {... this.table};
+    this.total = this.table.rows.length;
   }
 
 }
