@@ -22,7 +22,8 @@ export class DocumentComponent implements OnInit {
     { columnDef: 'documentType', header: 'Document Type' },
     { columnDef: 'comments', header: 'Comments' },
     { columnDef: 'documentPath', header: 'Document', file: true },
-    { columnDef: 'edit', header: '', edit: true, pk: 'studentDocumentId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'studentDocumentId' },
+    { columnDef: 'delete', header: '', delete: true, pk: 'studentDocumentId' }
   ] };
 
   ngOnInit(): void {
@@ -64,6 +65,15 @@ export class DocumentComponent implements OnInit {
 
   editItem(item: any): void {
     this.request = item;
+  }
+
+  deleteItem(item: any): void {
+    item.active = !item.active;
+    this.client.patchBodyRequest('Student/Document', item, item.studentDocumentId).subscribe(response => {
+      this.table.rows = response.responseObj.documentObj;
+      this.table = {... this.table};
+      this.alert.showMessage(response.errorObj[0].message);
+    });
   }
 
 }

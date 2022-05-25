@@ -25,7 +25,8 @@ export class AdmissionComponent implements OnInit {
     { columnDef: 'academicYear', header: 'Academic Year' },
     { columnDef: 'gradeDescription', header: 'Grade Description' },
     { columnDef: 'comments', header: 'Comments' },
-    { columnDef: 'edit', header: '', edit: true, pk: 'admissionId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'admissionId' },
+    { columnDef: 'delete', header: '', delete: true, pk: 'admissionId' }
   ] };
 
   ngOnInit(): void {
@@ -60,6 +61,15 @@ export class AdmissionComponent implements OnInit {
 
   editItem(item: any): void {
     this.request = item;
+  }
+
+  deleteItem(item: any): void {
+    item.active = !item.active;
+    this.client.patchBodyRequest('Student/Admission', item, item.admissionId).subscribe(response => {
+      this.table.rows = response.responseObj.admissionObj;
+      this.table = {... this.table};
+      this.alert.showMessage(response.errorObj[0].message);
+    });
   }
 
 }

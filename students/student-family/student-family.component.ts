@@ -24,7 +24,8 @@ export class StudentFamilyComponent implements OnInit {
     { columnDef: 'emailAddress', header: 'Email Address' },
     { columnDef: 'monthlyIncome', header: 'Monthly Income' },
     { columnDef: 'officeAddress', header: 'Office Address' },
-    { columnDef: 'edit', header: '', edit: true, pk: 'studentFamilyId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'studentFamilyId' },
+    { columnDef: 'delete', header: '', delete: true, pk: 'studentFamilyId' }
   ] };
 
   ngOnInit(): void {
@@ -57,6 +58,15 @@ export class StudentFamilyComponent implements OnInit {
 
   editItem(item: any): void {
     this.request = item;
+  }
+
+  deleteItem(item: any): void {
+    item.active = !item.active;
+    this.client.patchBodyRequest('Student/StudentFamily', item, item.studentFamilyId).subscribe(response => {
+      this.table.rows = response.responseObj.studentFamilyObj;
+      this.table = {... this.table};
+      this.alert.showMessage(response.errorObj[0].message);
+    });
   }
 
 }

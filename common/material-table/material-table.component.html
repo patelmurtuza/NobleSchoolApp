@@ -1,6 +1,9 @@
 <div>
   <mat-form-field>
-    <input matInput placeholder="Search here" (keyup)="applyFilter($event)">
+    <input matInput placeholder="Search here" (keyup)="applyFilter()" [(ngModel)]="search">
+    <button mat-button *ngIf="search" matSuffix mat-icon-button (click)="clearSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
   </mat-form-field>
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
@@ -18,8 +21,14 @@
         <div *ngIf="column.model">
           <a href="javascript:void(0)" (click)="openDialog(element[column.route], column.component)"> <mat-icon>visibility</mat-icon> </a>
         </div>
-        <div *ngIf="column.edit">
+        <div *ngIf="column.edit && element.active">
           <a href="javascript:void(0)" (click)="onEdit(element[column.pk], column.pk)"> <mat-icon>edit</mat-icon> </a>
+        </div>
+        <div *ngIf="column.delete">
+          <a href="javascript:void(0)" (click)="onDelete(element[column.pk], column.pk)"> 
+            <mat-icon *ngIf="element.active">thumb_up</mat-icon>
+            <mat-icon *ngIf="!element.active" color="warn">thumb_down</mat-icon>
+          </a>
         </div>
         <div *ngIf="!column.datePipe && !column.file">
           {{ element[column.columnDef] }} 

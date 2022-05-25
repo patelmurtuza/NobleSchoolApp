@@ -16,11 +16,15 @@ export class MaterialTableComponent implements OnInit, OnChanges {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @Input() table: any = {};
   @Output() editItem = new EventEmitter<any>();
+  @Output() deleteItem = new EventEmitter<any>();
 
   constructor(private dialog: MatDialog) { }
 
+  search: string = '';
+
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.table.rows);
+    this.dataSource.filter = this.search;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
@@ -37,12 +41,21 @@ export class MaterialTableComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
   }
 
-  applyFilter(event: Event) {
-    this.dataSource.filter = (event.target as HTMLInputElement).value;
+  applyFilter(): void {
+    this.dataSource.filter = this.search;
+  }
+
+  clearSearch(): void {
+    this.search = '';
+    this.dataSource.filter = this.search;
   }
 
   onEdit(id: number, pk: string): void {
     this.editItem.emit(this.table.rows[this.table.rows.findIndex((x: any) => x[pk] == id)]);
+  }
+
+  onDelete(id: number, pk: string): void {
+    this.deleteItem.emit(this.table.rows[this.table.rows.findIndex((x: any) => x[pk] == id)]);
   }
 
   openDialog(id: number, component: any): void {

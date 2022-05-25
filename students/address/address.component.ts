@@ -24,7 +24,8 @@ export class AddressComponent implements OnInit {
     { columnDef: 'city', header: 'City' },
     { columnDef: 'state', header: 'State' },
     { columnDef: 'zipCode', header: 'Zip Code' },
-    { columnDef: 'edit', header: '', edit: true, pk: 'addressId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'addressId' },
+    { columnDef: 'delete', header: '', delete: true, pk: 'addressId' }
   ] };
 
   ngOnInit(): void {
@@ -68,6 +69,18 @@ export class AddressComponent implements OnInit {
 
   editItem(item: any): void {
     this.request = item;
+  }
+
+  deleteItem(item: any): void {
+    item.active = !item.active;
+    this.client.patchBodyRequest('Student/Address', item, item.addressId).subscribe(response => {
+      this.table.rows = response.responseObj.addressObj;
+      this.table.rows.forEach(function(part:any, index:number, theArray:any) {
+        theArray[index].primary = theArray[index].isPrimary ? 'Primary' : 'Non Primary';
+      });
+      this.table = {... this.table};
+      this.alert.showMessage(response.errorObj[0].message);
+    });
   }
 
 }

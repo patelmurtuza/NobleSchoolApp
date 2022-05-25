@@ -62,6 +62,10 @@ export class ServiceClientService {
     }
   }
 
+  patchBodyRequest(action: string, request: any, id: number = 0): Observable<any> {
+    return this.httpClient.patch(environment.endUrl + action + '/' + id, request, { headers: this.httpOptions.headers });
+  }
+
   deleteRequest(action: string, id: number): Observable<any> {
     return this.httpClient.delete(environment.endUrl + action + '/' + id, { headers: this.httpOptions.headers });
   }

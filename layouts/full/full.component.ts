@@ -14,14 +14,18 @@ export class FullComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) { 
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener("change", () => {
+      this._mobileQueryListener;
+    });
   }
 
   ngAfterViewInit(): void {
     
   }
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeEventListener("change", () => {
+      this._mobileQueryListener;
+    });
   }
 
   ngOnInit(): void {

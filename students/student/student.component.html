@@ -5,6 +5,9 @@
       <mat-panel-title>
         <h1>Student Information</h1>
       </mat-panel-title>
+      <mat-panel-description>
+        <a [routerLink]="['/student-info']" [routerLinkActive]="['active']"><mat-icon>arrow_back</mat-icon></a>
+      </mat-panel-description>
     </mat-expansion-panel-header>
     <div>
       <form #myform="ngForm" (ngSubmit)="myform.valid && register()" novalidate>

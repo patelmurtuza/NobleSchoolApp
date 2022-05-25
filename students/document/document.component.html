@@ -5,8 +5,11 @@
       <mat-panel-title>
         <h1>Document Details</h1>
       </mat-panel-title>
+      <mat-panel-description>
+        <a [routerLink]="['/student-info']" [routerLinkActive]="['active']"><mat-icon>arrow_back</mat-icon></a>
+      </mat-panel-description>
     </mat-expansion-panel-header>
-    <app-material-table (editItem)="editItem($event)" [table]="table"></app-material-table>
+    <app-material-table (editItem)="editItem($event)" (deleteItem)="deleteItem($event)" [table]="table"></app-material-table>
   </mat-expansion-panel>
 </mat-accordion>
 <br />

@@ -20,7 +20,8 @@ export class PreviousEnrollmentComponent implements OnInit {
     { columnDef: 'percentage', header: 'Percentage' },
     { columnDef: 'leavingDate', header: 'Leaving Date', datePipe: true },
     { columnDef: 'comments', header: 'Comments' },
-    { columnDef: 'edit', header: '', edit: true, pk: 'previousEnrollmentId' }
+    { columnDef: 'edit', header: '', edit: true, pk: 'previousEnrollmentId' },
+    { columnDef: 'delete', header: '', delete: true, pk: 'previousEnrollmentId' }
   ] };
 
   ngOnInit(): void {
@@ -52,6 +53,15 @@ export class PreviousEnrollmentComponent implements OnInit {
 
   editItem(item: any): void {
     this.request = item;
+  }
+
+  deleteItem(item: any): void {
+    item.active = !item.active;
+    this.client.patchBodyRequest('Student/PreviousEnrollment', item, item.previousEnrollmentId).subscribe(response => {
+      this.table.rows = response.responseObj.previousEnrollmentObj;
+      this.table = {... this.table};
+      this.alert.showMessage(response.errorObj[0].message);
+    });
   }
 
 }
