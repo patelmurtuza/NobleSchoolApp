@@ -14,6 +14,7 @@ export class StudentInfoComponent implements OnInit {
     { columnDef: 'firstName', header: 'First Name' },
     { columnDef: 'middleName', header: 'Middle Name' },
     { columnDef: 'lastName', header: 'Last Name' },
+    { columnDef: 'gradeDescription', header: 'Grade Description' },
     { columnDef: 'dob', header: 'Date of Birth', datePipe: true },
     { columnDef: 'gender', header: 'Gender' },
     { columnDef: 'mobileNo', header: 'Mobile No' },

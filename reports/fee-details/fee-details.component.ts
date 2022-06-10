@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ViewFeeComponent } from '../../fees/view-fee/view-fee.component';
 import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
 
@@ -29,7 +30,8 @@ export class FeeDetailsComponent implements OnInit {
     { columnDef: 'chequeDate', header: 'Cheque Date', datePipe: true },
     { columnDef: 'bankName', header: 'Bank Name' },
     { columnDef: 'recieptType', header: 'Reciept Type' },
-    { columnDef: 'discount', header: 'Discount %' }
+    { columnDef: 'discount', header: 'Discount %' },
+    { columnDef: 'view', header: '', model: true, component: ViewFeeComponent, route: 'recieptNo' }
   ] };
   total: number = 0;
 

@@ -20,14 +20,7 @@ export class StudentGradeComponent implements OnInit {
   request: any = {};
   response: any[] = [];
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'Checked', 'StudentName' ];
-  table: any = { rows: [], columns: [
-    { columnDef: 'studentName', header: 'Student Name' },
-    { columnDef: 'rollNo', header: 'Roll No' },
-    { columnDef: 'gradeDescription', header: 'Grade Description' },
-    { columnDef: 'section', header: 'Section' },
-    { columnDef: 'academicYear', header: 'Academic Year' }
-  ] };
+  cols = [ 'checked', 'studentName', 'gradeDescription', 'section', 'academicYear' ];
   academicYear: string[] = [];
   grade: string[] = [];
 
@@ -35,18 +28,12 @@ export class StudentGradeComponent implements OnInit {
     this.academicYear = this.master.getAcademicYear();
     this.grade = this.master.getGrade();
     this.request.academicYear = this.academicYear[0];
-    this.client.getRequest('Student/StudentGrade', { academicYear: this.request.academicYear, section: 'N/A' }).subscribe(response => {
-      if(response.errorObj[0].code == 0) {
-        this.table.rows = response.responseObj.studentGradeObj;
-        this.table = {... this.table};
-      }
-    });
   }
 
   search(): void {
     this.client.getRequest('Student/StudentGrade', { academicYear: this.request.academicYear, gradeDescription: this.request.gradeDescription, section: 'N/A' }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
-        this.response = response.responseObj.studentGradeObj;
+        this.response = response.responseObj.studentGradeObj.sort((a, b) => (a.studentName < b.studentName ? -1 : 1));
         this.response.forEach(function(part, index, theArray) {
           theArray[index].checked = true;
         });
@@ -61,11 +48,10 @@ export class StudentGradeComponent implements OnInit {
   }
 
   register(form: NgForm): void {
-    const grade = this.response.filter(x => x.checked).sort((a, b) => (a.studentName < b.studentName ? -1 : 1));
+    const grade = this.response.filter(x => x.checked);
     this.request.studentGrades = grade.map(x => x.studentGradeId);
+    this.request.inTake = 24;
     this.client.postBodyRequest('Student/StudentGrade', this.request).subscribe(response => {
-      this.table.rows = response.responseObj.studentGradeObj;
-      this.table = {... this.table};
       this.alert.showMessage(response.errorObj[0].message);
       this.response = [];
       this.dataSource = new MatTableDataSource(this.response);

@@ -16,16 +16,21 @@ export class FeeInfoComponent implements OnInit {
     { columnDef: 'rollNo', header: 'Roll No' },
     { columnDef: 'gradeDescription', header: 'Grade Description' },
     { columnDef: 'section', header: 'Section' },
-    { columnDef: 'academicYear', header: 'Academic Year' },
+    { columnDef: 'termAmt', header: 'Fee Amount' },
+    { columnDef: 'uniformAmt', header: 'Uniform Fee' },
+    { columnDef: 'bookAmt', header: 'Book Fee' },
+    { columnDef: 'feeType', header: 'Fee Type Paid' },
+    { columnDef: 'balanceAmt', header: 'Balance Fee' },
+    { columnDef: 'status', header: 'Status' },
     { columnDef: 'view', header: '', view: true, url: 'fee', route: 'studentId' }
   ] };
   academicYear: string[] = [];
 
   ngOnInit(): void {
     this.academicYear = this.master.getAcademicYear();
-    this.client.getRequest('Student/StudentGrade', { academicYear: this.academicYear[0] }).subscribe(response => {
+    this.client.getRequest('Fee/StudentFeeDetail', { academicYear: this.academicYear[0] }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
-        this.table.rows = response.responseObj.studentGradeObj;
+        this.table.rows = response.responseObj.studentFeeDetailObj;
         this.table = {... this.table};
       }
     });
