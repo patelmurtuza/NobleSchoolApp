@@ -16,6 +16,7 @@ import { FeeStructureComponent } from '../masters/fee-structure/fee-structure.co
 import { FeeDetailsComponent } from '../reports/fee-details/fee-details.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { FeeDueComponent } from '../reports/fee-due/fee-due.component';
+import { DailyExpenseComponent } from '../masters/daily-expense/daily-expense.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -34,6 +35,7 @@ const routes: Routes = [
       { path: 'fee-details', component: FeeDetailsComponent },
       { path: 'fee-due', component: FeeDueComponent },
       { path: 'fee-structure', component: FeeStructureComponent },
+      { path: 'daily-expense', component: DailyExpenseComponent },
       { path: 'error', component: ErrorComponent },
       { path: 'not-found', component: NotFoundComponent },
       { path: '**', redirectTo: 'not-found' }

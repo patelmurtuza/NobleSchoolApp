@@ -11,22 +11,21 @@ export class StudentInfoComponent implements OnInit {
   constructor(private client: ServiceClientService) { }
 
   table: any = { rows: [], columns: [
-    { columnDef: 'firstName', header: 'First Name' },
-    { columnDef: 'middleName', header: 'Middle Name' },
-    { columnDef: 'lastName', header: 'Last Name' },
+    { columnDef: 'fullName', header: 'Full Name' },
     { columnDef: 'gradeDescription', header: 'Grade Description' },
     { columnDef: 'dob', header: 'Date of Birth', datePipe: true },
     { columnDef: 'gender', header: 'Gender' },
     { columnDef: 'mobileNo', header: 'Mobile No' },
+    { columnDef: 'studentPhotoPath', header: 'Photo', file: true },
     { columnDef: 'emailAddress', header: 'Email Address' },
-    { columnDef: 'profilePhotoPath', header: 'Profile Photo', file: true },
+    { columnDef: 'delete', header: '', delete: true, pk: 'admissionId' },
     { columnDef: 'view', header: '', view: true, url: 'student', route: 'studentId' }
   ] };
 
   ngOnInit(): void {
-    this.client.getRequest('Student/Student', null).subscribe(response => {
+    this.client.getRequest('Student/StudentInfo', null).subscribe(response => {
       if(response.errorObj[0].code == 0) {
-        this.table.rows = response.responseObj.studentObj;
+        this.table.rows = response.responseObj.studentInfoObj;
         this.table = {... this.table};
       }
     });

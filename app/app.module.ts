@@ -36,6 +36,7 @@ import { FeeStructureComponent } from '../masters/fee-structure/fee-structure.co
 import { FeeDetailsComponent } from '../reports/fee-details/fee-details.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { FeeDueComponent } from '../reports/fee-due/fee-due.component';
+import { DailyExpenseComponent } from '../masters/daily-expense/daily-expense.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { FeeDueComponent } from '../reports/fee-due/fee-due.component';
     FeeStructureComponent,
     FeeDetailsComponent,
     DashboardComponent,
-    FeeDueComponent
+    FeeDueComponent,
+    DailyExpenseComponent
   ],
   imports: [
     BrowserModule,
