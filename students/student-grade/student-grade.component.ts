@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MasterService } from '../../services/master.service';
 import { ServiceClientService } from '../../services/serviceclient.service';
@@ -13,6 +14,8 @@ import { SnackBarAlertService } from '../../services/snack-bar-alert.service';
 })
 export class StudentGradeComponent implements OnInit {
 
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  
   constructor(private client: ServiceClientService, private alert: SnackBarAlertService, private master: MasterService) { }
 
   isDisabled: boolean = true;
@@ -20,7 +23,7 @@ export class StudentGradeComponent implements OnInit {
   request: any = {};
   response: any[] = [];
   dataSource = new MatTableDataSource<any>();
-  cols = [ 'checked', 'studentName', 'gradeDescription', 'section', 'academicYear' ];
+  cols = [ 'checked', 'studentName', 'gradeDescription', 'section', 'rollNo', 'academicYear' ];
   academicYear: string[] = [];
   grade: string[] = [];
 
@@ -31,7 +34,7 @@ export class StudentGradeComponent implements OnInit {
   }
 
   search(): void {
-    this.client.getRequest('Student/StudentGrade', { academicYear: this.request.academicYear, gradeDescription: this.request.gradeDescription, section: 'N/A' }).subscribe(response => {
+    this.client.getRequest('Student/StudentGrade', { academicYear: this.request.academicYear, gradeDescription: this.request.gradeDescription }).subscribe(response => {
       if(response.errorObj[0].code == 0) {
         this.response = response.responseObj.studentGradeObj.sort((a, b) => (a.studentName < b.studentName ? -1 : 1));
         this.response.forEach(function(part, index, theArray) {
@@ -40,6 +43,7 @@ export class StudentGradeComponent implements OnInit {
         this.checkedAll = this.response.length > 0;
         this.isDisabled = this.response.length == 0;
         this.dataSource = new MatTableDataSource(this.response);
+        this.dataSource.paginator = this.paginator;
       }
       else {
         this.alert.showMessage(response.errorObj[0].message);
@@ -48,10 +52,24 @@ export class StudentGradeComponent implements OnInit {
   }
 
   register(form: NgForm): void {
-    const grade = this.response.filter(x => x.checked);
+    const grade = this.response.filter(x => x.checked && x.section == 'N/A');
     this.request.studentGrades = grade.map(x => x.studentGradeId);
     this.request.inTake = 24;
     this.client.postBodyRequest('Student/StudentGrade', this.request).subscribe(response => {
+      this.alert.showMessage(response.errorObj[0].message);
+      this.response = [];
+      this.dataSource = new MatTableDataSource(this.response);
+      this.isDisabled = true;
+      this.checkedAll = false;
+      form.resetForm();
+    });
+  }
+
+  promotion(form: NgForm): void {
+    const grade = this.response.filter(x => x.checked);
+    this.request.students = grade.map(x => x.studentId);
+    this.request.promoteAcademicYear = `${this.request.academicYear.split('-')[1].trim()} - ${+this.request.academicYear.split('-')[1].trim() + 1}`;
+    this.client.postBodyRequest('Student/PromoteStudent', this.request).subscribe(response => {
       this.alert.showMessage(response.errorObj[0].message);
       this.response = [];
       this.dataSource = new MatTableDataSource(this.response);
@@ -76,8 +94,8 @@ export class StudentGradeComponent implements OnInit {
     this.isDisabled = this.response.filter(x => x.checked).length == 0;
   }
 
-  onChecked(ob: MatCheckboxChange, index: number) {
-    this.response[index].checked = ob.checked;
+  onChecked(ob: MatCheckboxChange, id: number) {
+    this.response.find(x => x.studentGradeId == id).checked = ob.checked;
     this.checkedAll = this.response.filter(x => x.checked).length == this.response.length;
     this.isDisabled = this.response.filter(x => x.checked).length == 0;
   }
